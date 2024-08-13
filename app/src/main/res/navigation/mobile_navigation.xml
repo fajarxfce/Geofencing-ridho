@@ -23,7 +23,9 @@
         tools:layout="@layout/fragment_splash_screenragment" >
         <action
             android:id="@+id/action_splashScreenragment_to_welcomeFragment"
-            app:destination="@id/welcomeFragment" />
+            app:destination="@id/welcomeFragment"
+            app:popUpTo="@id/splashScreenragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_splashScreenragment_to_childFragment"
             app:destination="@id/childFragment" />
