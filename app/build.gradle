@@ -56,5 +56,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.2.2'
     implementation platform('com.google.firebase:firebase-bom:29.3.1')
 
+    //circleimageveiw
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+
 
 }

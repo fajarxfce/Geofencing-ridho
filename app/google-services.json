@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "690680090153",
+    "project_id": "geofencing-skripsi-ridho",
+    "storage_bucket": "geofencing-skripsi-ridho.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690680090153:android:66a817050d592cde60d638",
+        "android_client_info": {
+          "package_name": "com.example.geofencing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6IpBZ7Hi2f-FssVIS1lJKfg9G__nhxGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
