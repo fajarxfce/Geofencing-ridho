@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_nav_graph"
+    app:startDestination="@id/navigation_account">
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.example.geofencing.ui.parent.account.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/navigation_area"
+        android:name="com.example.geofencing.ui.parent.area.AreaFragment"
+        android:label="fragment_area"
+        tools:layout="@layout/fragment_area" />
+    <fragment
+        android:id="@+id/navigation_childs"
+        android:name="com.example.geofencing.ui.parent.childs.ChildsFragment"
+        android:label="fragment_childs"
+        tools:layout="@layout/fragment_childs" />
+</navigation>
