@@ -14,10 +14,19 @@
         android:id="@+id/navigation_area"
         android:name="com.example.geofencing.ui.parent.area.AreaFragment"
         android:label="fragment_area"
-        tools:layout="@layout/fragment_area" />
+        tools:layout="@layout/fragment_area" >
+        <action
+            android:id="@+id/action_navigation_area_to_addAreaFragment"
+            app:destination="@id/addAreaFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_childs"
         android:name="com.example.geofencing.ui.parent.childs.ChildsFragment"
         android:label="fragment_childs"
         tools:layout="@layout/fragment_childs" />
+    <fragment
+        android:id="@+id/addAreaFragment"
+        android:name="com.example.geofencing.ui.parent.area.AddAreaFragment"
+        android:label="fragment_add_area"
+        tools:layout="@layout/fragment_add_area" />
 </navigation>
