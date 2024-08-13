@@ -8,7 +8,14 @@
         android:id="@+id/welcomeFragment"
         android:name="com.example.geofencing.ui.welcome.WelcomeFragment"
         android:label="fragment_welcome"
-        tools:layout="@layout/fragment_welcome" />
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment_to_childLoginFragment"
+            app:destination="@id/childLoginFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_parentLoginFragment"
+            app:destination="@id/parentLoginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/splashScreenragment"
         android:name="com.example.geofencing.ui.splashscreen.SplashScreenragment"
@@ -17,5 +24,104 @@
         <action
             android:id="@+id/action_splashScreenragment_to_welcomeFragment"
             app:destination="@id/welcomeFragment" />
+        <action
+            android:id="@+id/action_splashScreenragment_to_childFragment"
+            app:destination="@id/childFragment" />
+        <action
+            android:id="@+id/action_splashScreenragment_to_parentFragment"
+            app:destination="@id/parentFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/childLoginFragment"
+        android:name="com.example.geofencing.ui.auth.login.ChildLoginFragment"
+        android:label="fragment_child_login"
+        tools:layout="@layout/fragment_child_login" >
+        <action
+            android:id="@+id/action_childLoginFragment_to_childRegisterFragment"
+            app:destination="@id/childRegisterFragment" />
+        <action
+            android:id="@+id/action_childLoginFragment_to_childFragment"
+            app:destination="@id/childFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/parentLoginFragment"
+        android:name="com.example.geofencing.ui.auth.login.ParentLoginFragment"
+        android:label="fragment_parent_login"
+        tools:layout="@layout/fragment_parent_login" >
+        <action
+            android:id="@+id/action_parentLoginFragment_to_parentRegisterFragment"
+            app:destination="@id/parentRegisterFragment" />
+        <action
+            android:id="@+id/action_parentLoginFragment_to_parentFragment"
+            app:destination="@id/parentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/childRegisterFragment"
+        android:name="com.example.geofencing.ui.auth.register.ChildRegisterFragment"
+        android:label="fragment_child_register"
+        tools:layout="@layout/fragment_child_register" />
+    <fragment
+        android:id="@+id/parentRegisterFragment"
+        android:name="com.example.geofencing.ui.auth.register.ParentRegisterFragment"
+        android:label="fragment_parent_register"
+        tools:layout="@layout/fragment_parent_register" />
+    <fragment
+        android:id="@+id/parentFragment"
+        android:name="com.example.geofencing.ui.parent.ParentFragment"
+        android:label="fragment_parent"
+        tools:layout="@layout/fragment_parent" />
+    <fragment
+        android:id="@+id/childFragment"
+        android:name="com.example.geofencing.ui.childs.ChildFragment"
+        android:label="fragment_child"
+        tools:layout="@layout/fragment_child" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.example.geofencing.ui.parent.account.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/areaFragment"
+        android:name="com.example.geofencing.ui.parent.area.AreaFragment"
+        android:label="fragment_area"
+        tools:layout="@layout/fragment_area" >
+        <action
+            android:id="@+id/action_areaFragment_to_addAreaFragment"
+            app:destination="@id/addAreaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/childsFragment"
+        android:name="com.example.geofencing.ui.parent.childs.ChildsFragment"
+        android:label="fragment_childs"
+        tools:layout="@layout/fragment_childs" >
+        <action
+            android:id="@+id/action_childsFragment_to_childAreaFragment"
+            app:destination="@id/childAreaFragment" />
+        <action
+            android:id="@+id/action_childsFragment_to_childHistoryLocationFragment"
+            app:destination="@id/childHistoryLocationFragment" />
+        <action
+            android:id="@+id/action_childsFragment_to_childLocationFragment"
+            app:destination="@id/childLocationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAreaFragment"
+        android:name="com.example.geofencing.ui.parent.area.AddAreaFragment"
+        android:label="fragment_add_area"
+        tools:layout="@layout/fragment_add_area" />
+    <fragment
+        android:id="@+id/childAreaFragment"
+        android:name="com.example.geofencing.ui.parent.childs.ChildAreaFragment"
+        android:label="fragment_child_area"
+        tools:layout="@layout/fragment_child_area" />
+    <fragment
+        android:id="@+id/childHistoryLocationFragment"
+        android:name="com.example.geofencing.ui.parent.childs.ChildHistoryLocationFragment"
+        android:label="fragment_child_history_location"
+        tools:layout="@layout/fragment_child_history_location" />
+    <fragment
+        android:id="@+id/childLocationFragment"
+        android:name="com.example.geofencing.ui.parent.childs.ChildLocationFragment"
+        android:label="fragment_child_location"
+        tools:layout="@layout/fragment_child_location" />
 </navigation>
