@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/splashScreenragment">
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.geofencing.ui.welcome.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome" />
+    <fragment
+        android:id="@+id/splashScreenragment"
+        android:name="com.example.geofencing.ui.splashscreen.SplashScreenragment"
+        android:label="fragment_splash_screenragment"
+        tools:layout="@layout/fragment_splash_screenragment" >
+        <action
+            android:id="@+id/action_splashScreenragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
+</navigation>
