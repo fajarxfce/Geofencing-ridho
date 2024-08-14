@@ -54,6 +54,9 @@ public class ChildsFragment extends Fragment {
         });
 
         viewModel.getChildrenLiveData().observe(getViewLifecycleOwner(), children -> {
+            for (int i = 0; i < children.size(); i++) {
+                Log.d(TAG, "onViewCreated: "+children.get(i).getPairCode());
+            }
             adapter.updateChildList(children);
             adapter.setOnItemClickListener(new ChildAdapter.OnItemClickListener() {
                 @Override

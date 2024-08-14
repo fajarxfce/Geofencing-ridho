@@ -5,6 +5,7 @@ import static com.example.geofencing.helper.StringHelper.usernameFromEmail;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.geofencing.model.Child;
@@ -30,6 +31,7 @@ public class ChildRepository {
     private final MutableLiveData<String> errorLiveData;
     private final MutableLiveData<String> errorSaveLiveData;
     private final MutableLiveData<String> successSaveLiveData;
+    private final MutableLiveData<List<Child>> childrenLiveData;
     private final DatabaseReference DBchilds;
     private final DatabaseReference DBpairCode;
     private final DatabaseReference DBparents;
@@ -40,6 +42,7 @@ public class ChildRepository {
         errorLiveData = new MutableLiveData<>();
         errorSaveLiveData = new MutableLiveData<>();
         successSaveLiveData = new MutableLiveData<>();
+        childrenLiveData = new MutableLiveData<>(new ArrayList<>());
         DBchilds = FirebaseDatabase.getInstance().getReference("childs");
         DBpairCode = FirebaseDatabase.getInstance().getReference("child_pair_code");
         DBparents = FirebaseDatabase.getInstance().getReference("parents");
@@ -161,24 +164,28 @@ public class ChildRepository {
                 });
     }
 
-    public void fetchChildren(String parentUid, ChildrenCallback callback) {
-        DBparents.child(parentUid).child("childs").addListenerForSingleValueEvent(new ValueEventListener() {
+    public void fetchChildren(String parentUid) {
+        DBparents.child(parentUid)
+                .child("childs").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange: called");
                 List<Child> children = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Child child = snapshot.getValue(Child.class);
                     children.add(child);
                 }
-                callback.onChildrenFetched(children);
+                childrenLiveData.postValue(children);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                callback.onError(databaseError.getMessage());
+
             }
         });
+    }
+
+    public LiveData<List<Child>> getChildrenLiveData() {
+        return childrenLiveData;
     }
 
     public void deleteChildFromParent(String parentUid, String pairCode, DeleteChildCallback callback) {

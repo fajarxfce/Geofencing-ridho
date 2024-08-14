@@ -81,23 +81,11 @@ public class ChildViewModel extends ViewModel {
     }
 
     public LiveData<List<Child>> getChildrenLiveData() {
-        return childrenLiveData;
+        return repository.getChildrenLiveData();
     }
 
     public void fetchChildren(String parentUid) {
-        repository.fetchChildren(parentUid, new ChildRepository.ChildrenCallback() {
-            @Override
-            public void onChildrenFetched(List<Child> children) {
-                childrenLiveData.postValue(children);
-            }
-
-            @Override
-            public void onError(String error) {
-                // Handle error
-            }
-
-
-        });
+        repository.fetchChildren(parentUid);
     }
 
     public void deleteChildFromParent(String parentUid, String childUid) {
