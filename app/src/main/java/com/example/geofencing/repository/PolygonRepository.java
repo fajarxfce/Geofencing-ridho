@@ -64,4 +64,14 @@ public class PolygonRepository {
                 .child(childUid)
                 .push().setValue(message);
     }
+
+    public void saveCoordinates(String childId, double latitude, double longitude) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("latitude", latitude);
+        updates.put("longitude", longitude);
+
+        childRef
+                .child(childId)
+                .updateChildren(updates);
+    }
 }

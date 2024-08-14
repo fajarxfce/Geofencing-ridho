@@ -62,6 +62,10 @@ public class LocationService extends Service {
                 double longitude = locationResult.getLastLocation().getLongitude();
                 LatLng currentLocation = new LatLng(latitude, longitude);
 
+                Log.d(TAG, "onLocationResult: "+latitude+" "+longitude);
+
+                repository.saveCoordinates(mAuth.getUid(), latitude, longitude);
+
                 boolean insideAnyPolygon = false;
                 String polygonName = "";
                 Map<String, List<LatLng>> polygons = polygonPoints.getValue();
