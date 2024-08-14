@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.geofencing.databinding.DialogEnterChildPaircodeBinding;
 import com.example.geofencing.viewmodel.ChildViewModel;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class EnterChildPairCodeDialog extends DialogFragment {
     private static final String TAG = "EnterAreaNameDialog";
     DialogEnterChildPaircodeBinding binding;
     private ChildViewModel viewModel;
+    private FirebaseAuth Auth;
     public EnterChildPairCodeDialog() {
     }
 
@@ -45,7 +47,7 @@ public class EnterChildPairCodeDialog extends DialogFragment {
         if (dialog != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
-
+        Auth = FirebaseAuth.getInstance();
         viewModel = new ViewModelProvider(this).get(ChildViewModel.class);
         binding.btnSubmit.setOnClickListener(view1 -> {
             String pairCode = binding.txtAreaName.getText().toString();
@@ -62,12 +64,19 @@ public class EnterChildPairCodeDialog extends DialogFragment {
             viewModel.checkPairCode(pairCode);
         });
 
-        viewModel.getPairCodeExists().observe(getViewLifecycleOwner(), exists -> {
-            if (exists) {
-                Toast.makeText(getContext(), "Pair code exists", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), "Kode pairing tidak ditemukan!", Toast.LENGTH_SHORT).show();
-            }
+        viewModel.getChildLiveData().observe(getViewLifecycleOwner(), child -> {
+            String parentUid = Auth.getCurrentUser().getUid();
+            String pairCode = binding.txtAreaName.getText().toString().trim();
+            viewModel.saveChildToParent(parentUid, pairCode, child);
+        });
+
+        viewModel.getSuccessSaveLiveData().observe(getViewLifecycleOwner(), s -> {
+            Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
+            dismiss();
+        });
+
+        viewModel.getErrorSaveLiveData().observe(getViewLifecycleOwner(), s -> {
+            Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
         });
     }
 
