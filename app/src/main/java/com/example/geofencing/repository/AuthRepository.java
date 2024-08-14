@@ -29,6 +29,7 @@ public class AuthRepository {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         userLiveData.postValue(firebaseAuth.getCurrentUser());
                         saveParentData(user);
+                        firebaseAuth.signOut();
                     } else {
                         errorLiveData.postValue(task.getException().getMessage());
                     }
