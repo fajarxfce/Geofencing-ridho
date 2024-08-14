@@ -23,10 +23,35 @@
         android:id="@+id/navigation_childs"
         android:name="com.example.geofencing.ui.parent.childs.ChildsFragment"
         android:label="fragment_childs"
-        tools:layout="@layout/fragment_childs" />
+        tools:layout="@layout/fragment_childs" >
+        <action
+            android:id="@+id/action_navigation_childs_to_childLocationFragment"
+            app:destination="@id/childLocationFragment" />
+        <action
+            android:id="@+id/action_navigation_childs_to_childAreaFragment"
+            app:destination="@id/childAreaFragment" />
+        <action
+            android:id="@+id/action_navigation_childs_to_childHistoryLocationFragment"
+            app:destination="@id/childHistoryLocationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addAreaFragment"
         android:name="com.example.geofencing.ui.parent.area.AddAreaFragment"
         android:label="fragment_add_area"
         tools:layout="@layout/fragment_add_area" />
+    <fragment
+        android:id="@+id/childHistoryLocationFragment"
+        android:name="com.example.geofencing.ui.parent.childs.ChildHistoryLocationFragment"
+        android:label="fragment_child_history_location"
+        tools:layout="@layout/fragment_child_history_location" />
+    <fragment
+        android:id="@+id/childLocationFragment"
+        android:name="com.example.geofencing.ui.parent.childs.ChildLocationFragment"
+        android:label="fragment_child_location"
+        tools:layout="@layout/fragment_child_location" />
+    <fragment
+        android:id="@+id/childAreaFragment"
+        android:name="com.example.geofencing.ui.parent.childs.ChildAreaFragment"
+        android:label="fragment_child_area"
+        tools:layout="@layout/fragment_child_area" />
 </navigation>

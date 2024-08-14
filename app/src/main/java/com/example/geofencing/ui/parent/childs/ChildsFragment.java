@@ -67,6 +67,13 @@ public class ChildsFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         binding.recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new ChildAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int i) {
+                ChildOptionDialog dialog = new ChildOptionDialog("id", "name", "pairCode");
+                dialog.show(getParentFragmentManager(), dialog.getTag());
+            }
+        });
     }
 
 
