@@ -55,6 +55,18 @@ public class ChildsFragment extends Fragment {
 
         viewModel.getChildrenLiveData().observe(getViewLifecycleOwner(), children -> {
             adapter.updateChildList(children);
+            adapter.setOnItemClickListener(new ChildAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int i) {
+                    String childUid = children.get(i).getChildId();
+                    Bundle args = new Bundle();
+                    args.putString("child_uid", childUid);
+
+                    ChildOptionDialog dialog = new ChildOptionDialog();
+                    dialog.setArguments(args);
+                    dialog.show(getParentFragmentManager(), dialog.getTag());
+                }
+            });
         });
 
         String parentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -67,13 +79,7 @@ public class ChildsFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         binding.recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new ChildAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int i) {
-                ChildOptionDialog dialog = new ChildOptionDialog("id", "name", "pairCode");
-                dialog.show(getParentFragmentManager(), dialog.getTag());
-            }
-        });
+
     }
 
 

@@ -27,5 +27,12 @@ public class ChildAreaFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.fab.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putString("child_uid", getArguments().getString("child_uid"));
+            AddPolygonBottomsheet bottomsheet = new AddPolygonBottomsheet();
+            bottomsheet.setArguments(args);
+            bottomsheet.show(getChildFragmentManager(), "addPolygon");
+        });
     }
 }

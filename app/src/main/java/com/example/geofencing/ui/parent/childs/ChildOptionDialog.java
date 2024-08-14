@@ -17,13 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class ChildOptionDialog extends DialogFragment {
 
     private static final String TAG = "ChildOptionDialog";
-    private String id;
-    private String name, pairCode;
 
-    public ChildOptionDialog(String id, String name, String paircode) {
-        this.id = id;
-        this.name = name;
-        this.pairCode = paircode;
+    public ChildOptionDialog() {
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -31,8 +26,7 @@ public class ChildOptionDialog extends DialogFragment {
         String[] options = {"Lihat Lokasi Anak", "Lihat Riwayat Lokasi", "Area", "Hapus Anak"};
 
         Bundle bundle = new Bundle();
-        bundle.putString("id", this.id);
-        bundle.putString("name", this.name);
+        bundle.putString("child_uid", getArguments().getString("child_uid"));
 
         builder.setItems(options, (dialog, which) -> {
             switch (which) {
@@ -54,7 +48,7 @@ public class ChildOptionDialog extends DialogFragment {
                 case 3:
                     // Hapus Anak
 //                    new DeleteChildDialog(this.id, this.name, this.pairCode).show(getParentFragmentManager(), "delete_child");
-                    Log.d(TAG, "onCreateDialog: "+this.pairCode);
+
                     break;
             }
         });
