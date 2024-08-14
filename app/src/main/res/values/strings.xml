@@ -17,4 +17,6 @@
     <string name="masukkan_kode_pairing">Masukkan Kode Pairing</string>
     <string name="save">Simpan</string>
     <string name="google_map_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDCM0gMyC9oVbrpMTRyUvC06Iz79BUKrkw</string>
+    <string name="masukkan_nama_polygon">Masukkan nama area</string>
+    <string name="simpan">Simpan</string>
 </resources>
