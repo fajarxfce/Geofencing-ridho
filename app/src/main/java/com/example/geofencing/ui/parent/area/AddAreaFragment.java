@@ -73,7 +73,7 @@ public class AddAreaFragment extends Fragment {
     private void onSaveClick(View v) {
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("points", (ArrayList<? extends Parcelable>) points);
-         EnterAreaNameDialog dialog = new EnterAreaNameDialog();
+         EnterAreaNameDialog dialog = new EnterAreaNameDialog(requireContext());
          dialog.setArguments(bundle);
          dialog.show(getParentFragmentManager(), "EnterAreaNameDialog");
     }

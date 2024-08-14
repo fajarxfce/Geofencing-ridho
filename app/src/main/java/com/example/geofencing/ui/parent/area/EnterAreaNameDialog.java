@@ -1,7 +1,9 @@
 package com.example.geofencing.ui.parent.area;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.geofencing.databinding.DialogEnterAreaNameBinding;
+import com.example.geofencing.model.CustomLatLng;
 import com.example.geofencing.repository.AreaRepository;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -23,9 +26,11 @@ public class EnterAreaNameDialog extends DialogFragment {
     private static final String TAG = "EnterAreaNameDialog";
     DialogEnterAreaNameBinding binding;
     private AreaRepository areaRepository;
+    private Context context;
 
-    public EnterAreaNameDialog() {
+    public EnterAreaNameDialog(Context context) {
         areaRepository = new AreaRepository();
+        this.context = context;
     }
 
     @Override
@@ -52,16 +57,14 @@ public class EnterAreaNameDialog extends DialogFragment {
         areaRepository.saveArea(polygonName, points, new AreaRepository.SaveAreaCallback() {
             @Override
             public void onSuccess() {
-                if (isAdded()) {
-                    Toast.makeText(requireContext(), "Berhasil menyimpan area!", Toast.LENGTH_SHORT).show();
-                }
+                Log.d(TAG, "onSuccess: area saved");
+                Toast.makeText(context, "Berhasil menyimpan area!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                if (isAdded()) {
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(context, "Gagal menyimpan area!", Toast.LENGTH_SHORT).show();
+
             }
         });
         dismiss();
