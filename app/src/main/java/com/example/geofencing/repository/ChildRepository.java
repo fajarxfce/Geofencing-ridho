@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.geofencing.model.Child;
 import com.example.geofencing.model.LocationHistory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -34,6 +35,7 @@ public class ChildRepository {
     private final MutableLiveData<String> successSaveLiveData;
     private final MutableLiveData<List<Child>> childrenLiveData;
     private final MutableLiveData<List<LocationHistory>> locationHistoryLiveData;
+    private final MutableLiveData<LatLng> coordinatesLiveData;
     private final DatabaseReference DBchilds;
     private final DatabaseReference DBpairCode;
     private final DatabaseReference DBparents;
@@ -47,6 +49,7 @@ public class ChildRepository {
         successSaveLiveData = new MutableLiveData<>();
         childrenLiveData = new MutableLiveData<>(new ArrayList<>());
         locationHistoryLiveData = new MutableLiveData<>();
+        coordinatesLiveData = new MutableLiveData<>();
         DBchilds = FirebaseDatabase.getInstance().getReference("childs");
         DBpairCode = FirebaseDatabase.getInstance().getReference("child_pair_code");
         DBparents = FirebaseDatabase.getInstance().getReference("parents");
@@ -219,6 +222,30 @@ public class ChildRepository {
 
     public LiveData<List<Child>> getChildrenLiveData() {
         return childrenLiveData;
+    }
+
+    public void fetchChildCoordinates(String childUid) {
+        DBchilds
+                .child(childUid)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Double latitude = snapshot.child("latitude").getValue(Double.class);
+                        Double longitude = snapshot.child("longitude").getValue(Double.class);
+                        if (latitude != null && longitude != null) {
+                            coordinatesLiveData.postValue(new LatLng(latitude, longitude));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Handle possible errors.
+                    }
+                });
+    }
+
+    public MutableLiveData<LatLng> getCoordinatesLiveData() {
+        return coordinatesLiveData;
     }
 
     public void deleteChildFromParent(String parentUid, String pairCode, DeleteChildCallback callback) {

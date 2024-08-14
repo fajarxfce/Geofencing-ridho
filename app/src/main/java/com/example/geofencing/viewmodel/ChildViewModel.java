@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.geofencing.model.Child;
 import com.example.geofencing.model.LocationHistory;
 import com.example.geofencing.repository.ChildRepository;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public class ChildViewModel extends ViewModel {
     private final MutableLiveData<String> errorSaveLiveData;
     private final MutableLiveData<List<Child>> childrenLiveData;
     private final MutableLiveData<List<LocationHistory>> locationHistoryLiveData;
+    private final MutableLiveData<LatLng> coordinatesLiveData;
+
 
     public ChildViewModel() {
         repository = new ChildRepository();
@@ -29,6 +32,7 @@ public class ChildViewModel extends ViewModel {
         successSaveLiveData = repository.getSuccessSaveLiveData();
         errorSaveLiveData = repository.getErrorSaveLiveData();
         locationHistoryLiveData = repository.getLocationHistoryLiveData();
+        coordinatesLiveData = repository.getCoordinatesLiveData();
         childrenLiveData = new MutableLiveData<>();
     }
 
@@ -89,6 +93,14 @@ public class ChildViewModel extends ViewModel {
 
     public void fetchChildren(String parentUid) {
         repository.fetchChildren(parentUid);
+    }
+
+    public LiveData<LatLng> getCoordinatesLiveData() {
+        return coordinatesLiveData;
+    }
+
+    public void fetchChildCoordinates(String childUid) {
+        repository.fetchChildCoordinates(childUid);
     }
 
     public void deleteChildFromParent(String parentUid, String childUid) {
