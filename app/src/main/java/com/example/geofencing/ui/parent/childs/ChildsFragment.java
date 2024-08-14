@@ -59,8 +59,10 @@ public class ChildsFragment extends Fragment {
                 @Override
                 public void onItemClick(View view, int i) {
                     String childUid = children.get(i).getChildId();
+                    String pairCode = children.get(i).getPairCode();
                     Bundle args = new Bundle();
                     args.putString("child_uid", childUid);
+                    args.putString("pair_code", pairCode);
 
                     ChildOptionDialog dialog = new ChildOptionDialog();
                     dialog.setArguments(args);

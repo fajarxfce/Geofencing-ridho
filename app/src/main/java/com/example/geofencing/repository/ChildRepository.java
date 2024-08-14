@@ -86,7 +86,7 @@ public class ChildRepository {
         String email = user.getEmail();
         String username = usernameFromEmail(user.getEmail());
         int pairCode = generatePairCode();
-        Child child = new Child(username, email, uid);
+        Child child = new Child(username, email, uid, String.valueOf(pairCode));
         DBchilds.child(user.getUid()).setValue(child);
         DBpairCode.child(String.valueOf(pairCode))
                 .setValue(child);
@@ -123,7 +123,7 @@ public class ChildRepository {
                     String email = dataSnapshot.child("email").getValue(String.class);
                     String username = dataSnapshot.child("username").getValue(String.class);
 
-                    Child child = new Child(username, email, childId);
+                    Child child = new Child(username, email, childId, pairCode);
                     callback.onExist(child);
                 } else {
                     callback.onNotExist();
@@ -179,6 +179,21 @@ public class ChildRepository {
                 callback.onError(databaseError.getMessage());
             }
         });
+    }
+
+    public void deleteChildFromParent(String parentUid, String pairCode, DeleteChildCallback callback) {
+        DBparents
+                .child(parentUid)
+                .child("childs")
+                .child(pairCode)
+                .removeValue()
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    public interface DeleteChildCallback {
+        void onSuccess();
+        void onFailure(String errorMessage);
     }
 
 }

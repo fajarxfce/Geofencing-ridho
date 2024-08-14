@@ -99,4 +99,18 @@ public class ChildViewModel extends ViewModel {
 
         });
     }
+
+    public void deleteChildFromParent(String parentUid, String childUid) {
+        repository.deleteChildFromParent(parentUid, childUid, new ChildRepository.DeleteChildCallback() {
+            @Override
+            public void onSuccess() {
+                // Handle success if needed
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle failure if needed
+            }
+        });
+    }
 }
