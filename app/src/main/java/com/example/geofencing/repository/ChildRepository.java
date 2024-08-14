@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ChildRepository {
@@ -46,6 +48,11 @@ public class ChildRepository {
     public interface PairCodeCallback {
         void onExist(Child child);
         void onNotExist();
+    }
+
+    public interface ChildrenCallback {
+        void onChildrenFetched(List<Child> children);
+        void onError(String error);
     }
 
     public void register(String email, String password) {
@@ -142,11 +149,36 @@ public class ChildRepository {
                         if (task.isSuccessful()) {
                             successSaveLiveData.postValue("Anak berhasil disimpan");
                         } else {
-                            errorSaveLiveData.postValue(task.getException().getMessage());
+                            errorSaveLiveData.postValue("Kode pairing tidak ditemukan");
                         }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        errorSaveLiveData.postValue("Kode pairing tidak ditemukan");
                     }
                 });
     }
 
+    public void fetchChildren(String parentUid, ChildrenCallback callback) {
+        DBparents.child(parentUid).child("childs").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: called");
+                List<Child> children = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Child child = snapshot.getValue(Child.class);
+                    children.add(child);
+                }
+                callback.onChildrenFetched(children);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onError(databaseError.getMessage());
+            }
+        });
+    }
 
 }

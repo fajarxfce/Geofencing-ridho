@@ -8,6 +8,8 @@ import com.example.geofencing.model.Child;
 import com.example.geofencing.repository.ChildRepository;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.List;
+
 public class ChildViewModel extends ViewModel {
     private final ChildRepository repository;
     private final MutableLiveData<FirebaseUser> userLiveData;
@@ -16,6 +18,7 @@ public class ChildViewModel extends ViewModel {
     private final MutableLiveData<Boolean> pairCodeExists = new MutableLiveData<>();
     private final MutableLiveData<String> successSaveLiveData;
     private final MutableLiveData<String> errorSaveLiveData;
+    private final MutableLiveData<List<Child>> childrenLiveData;
 
     public ChildViewModel() {
         repository = new ChildRepository();
@@ -23,6 +26,7 @@ public class ChildViewModel extends ViewModel {
         errorLiveData = repository.getErrorLiveData();
         successSaveLiveData = repository.getSuccessSaveLiveData();
         errorSaveLiveData = repository.getErrorSaveLiveData();
+        childrenLiveData = new MutableLiveData<>();
     }
 
     public void register(String email, String password) {
@@ -76,4 +80,23 @@ public class ChildViewModel extends ViewModel {
         return errorSaveLiveData;
     }
 
+    public LiveData<List<Child>> getChildrenLiveData() {
+        return childrenLiveData;
+    }
+
+    public void fetchChildren(String parentUid) {
+        repository.fetchChildren(parentUid, new ChildRepository.ChildrenCallback() {
+            @Override
+            public void onChildrenFetched(List<Child> children) {
+                childrenLiveData.postValue(children);
+            }
+
+            @Override
+            public void onError(String error) {
+                // Handle error
+            }
+
+
+        });
+    }
 }
