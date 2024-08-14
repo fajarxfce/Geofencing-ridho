@@ -28,15 +28,14 @@ public class SplashScreenragment extends Fragment implements NetworkChangeReceiv
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentSplashScreenragmentBinding.inflate(inflater, container, false);
-
-        network = new NetworkChangeReceiver(this);
-        getActivity().registerReceiver(network, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        network = new NetworkChangeReceiver(this);
+        getActivity().registerReceiver(network, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
@@ -48,5 +47,11 @@ public class SplashScreenragment extends Fragment implements NetworkChangeReceiv
         } else {
             Toast.makeText(requireContext(), "Tidak ada koneksi internet", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().unregisterReceiver(network);
     }
 }
