@@ -14,4 +14,6 @@
     <string name="account">Akun</string>
     <string name="area">Area</string>
     <string name="childs">Childs</string>
+    <string name="masukkan_kode_pairing">Masukkan Kode Pairing</string>
+    <string name="save">Simpan</string>
 </resources>
