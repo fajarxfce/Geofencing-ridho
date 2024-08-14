@@ -36,8 +36,6 @@ public class ParentRegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         parentRegisterViewModel = new ViewModelProvider(this).get(ParentRegisterViewModel.class);
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        Log.d(TAG, "onViewCreated: "+auth.getUid());
         binding.register.setOnClickListener(v -> {
             if (!validateForm()) {
                 return;

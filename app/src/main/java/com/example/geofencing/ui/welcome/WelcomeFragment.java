@@ -26,7 +26,7 @@ public class WelcomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.btnLoginParent.setOnClickListener(v -> {
+        binding.btnLoginChild.setOnClickListener(v -> {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_welcomeFragment_to_childLoginFragment);
         });
         binding.btnLoginParent.setOnClickListener(v -> {
