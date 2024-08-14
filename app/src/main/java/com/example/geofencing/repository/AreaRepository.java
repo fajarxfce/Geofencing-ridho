@@ -68,6 +68,65 @@ public class AreaRepository {
         });
     }
 
+    public void assignPolygonToChild(String childUid, String polygonName, List<CustomLatLng> points, AssignPolygonCallback callback) {
+        databaseReference.child("childs")
+                .child(childUid)
+                .child("polygons")
+                .child(polygonName)
+                .setValue(points)
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    public void fetchUnassignedPolygons(String parentUid, String childUid, FetchUnassignedPolygonsCallback callback) {
+        databaseReference.child("parents").child(parentUid)
+                .child("polygons")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot parentSnapshot) {
+                List<Polygon> allPolygons = new ArrayList<>();
+                for (DataSnapshot snapshot : parentSnapshot.getChildren()) {
+                    String name = snapshot.getKey();
+                    List<CustomLatLng> points = new ArrayList<>();
+                    for (DataSnapshot pointSnapshot : snapshot.getChildren()) {
+                        CustomLatLng point = pointSnapshot.getValue(CustomLatLng.class);
+                        points.add(point);
+                    }
+                    allPolygons.add(new Polygon(name, points));
+                }
+
+                databaseReference.child("childs").child(childUid).child("polygons").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot childSnapshot) {
+                        List<String> assignedPolygonNames = new ArrayList<>();
+                        for (DataSnapshot snapshot : childSnapshot.getChildren()) {
+                            assignedPolygonNames.add(snapshot.getKey());
+                        }
+
+                        List<Polygon> unassignedPolygons = new ArrayList<>();
+                        for (Polygon polygon : allPolygons) {
+                            if (!assignedPolygonNames.contains(polygon.getName())) {
+                                unassignedPolygons.add(polygon);
+                            }
+                        }
+
+                        callback.onUnassignedPolygonsFetched(unassignedPolygons);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        callback.onError(databaseError.getMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onError(databaseError.getMessage());
+            }
+        });
+    }
+
     public interface GetAreasCallback {
         void onAreasFetched(List<Polygon> areas);
 
@@ -78,5 +137,15 @@ public class AreaRepository {
         void onSuccess();
 
         void onFailure(String errorMessage);
+    }
+
+    public interface AssignPolygonCallback {
+        void onSuccess();
+        void onFailure(String errorMessage);
+    }
+
+    public interface FetchUnassignedPolygonsCallback {
+        void onUnassignedPolygonsFetched(List<Polygon> polygons);
+        void onError(String errorMessage);
     }
 }

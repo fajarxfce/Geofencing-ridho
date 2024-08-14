@@ -16,6 +16,15 @@ import java.util.List;
 public class PolygonAdapter extends RecyclerView.Adapter<PolygonAdapter.PolygonViewHolder> {
 
     private List<Polygon> polygonList;
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, Polygon polygon);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
 
     public PolygonAdapter(List<Polygon> polygonList) {
         this.polygonList = polygonList;
@@ -32,7 +41,11 @@ public class PolygonAdapter extends RecyclerView.Adapter<PolygonAdapter.PolygonV
     public void onBindViewHolder(@NonNull PolygonViewHolder holder, int position) {
         Polygon polygon = polygonList.get(position);
         holder.nameTextView.setText(polygon.getName());
-        // Additional binding logic if needed
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(position,polygon);
+            }
+        });
     }
 
     @Override

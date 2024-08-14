@@ -15,12 +15,16 @@ public class AreaViewModel extends ViewModel {
     private final AreaRepository repository;
     private final MutableLiveData<List<Polygon>> areasLiveData;
     private final MutableLiveData<Boolean> saveSuccessLiveData;
+    private final MutableLiveData<List<Polygon>> unassignedPolygonsLiveData;
+
 
 
     public AreaViewModel() {
         repository = new AreaRepository();
         areasLiveData = new MutableLiveData<>();
         saveSuccessLiveData = new MutableLiveData<>();
+        unassignedPolygonsLiveData = new MutableLiveData<>();
+
     }
 
     public LiveData<Boolean> getSaveSuccessLiveData() {
@@ -57,5 +61,37 @@ public class AreaViewModel extends ViewModel {
                 saveSuccessLiveData.postValue(false);
             }
         });
+    }
+
+    public void assignPolygonToChild(String childUid, String polygonName, List<CustomLatLng> points) {
+        repository.assignPolygonToChild(childUid, polygonName, points, new AreaRepository.AssignPolygonCallback() {
+            @Override
+            public void onSuccess() {
+                // Handle success
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle failure
+            }
+        });
+    }
+
+    public void fetchUnassignedPolygons(String parentUid, String childUid) {
+        repository.fetchUnassignedPolygons(parentUid, childUid, new AreaRepository.FetchUnassignedPolygonsCallback() {
+            @Override
+            public void onUnassignedPolygonsFetched(List<Polygon> polygons) {
+                unassignedPolygonsLiveData.postValue(polygons);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                unassignedPolygonsLiveData.postValue(null);
+            }
+        });
+    }
+
+    public LiveData<List<Polygon>> getUnassignedPolygonsLiveData() {
+        return unassignedPolygonsLiveData;
     }
 }
