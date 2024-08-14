@@ -1,9 +1,13 @@
 package com.example.geofencing.ui.welcome;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -20,6 +24,7 @@ public class WelcomeFragment extends Fragment {
     private FragmentWelcomeBinding binding;
     private FirebaseAuth mAuth;
     private SharedPreferencesUtil sf;
+    private int FINE_LOCATION_ACCESS_REQUEST_CODE = 10001;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,10 +44,38 @@ public class WelcomeFragment extends Fragment {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_welcomeFragment_to_parentLoginFragment);
         });
 
+        if (!checkAgreementCache()){
+            AgreementDialog.showAgreementDialog(requireContext(), new AgreementDialog.AgreementDialogListener() {
+                @Override
+                public void onAgreementAccepted() {
+                    sf.setPref("agreement_accepted", "true", requireContext());
+                    requestLocationPermission();
+                }
+
+                @Override
+                public void onAgreementRejected() {
+                    onDestroy();
+                }
+            });
+        }
+
         if (mAuth.getCurrentUser() != null && sf.getPref("account_type", requireContext()) != null) {
             navigateBasedOnAccountType();
         }
 
+    }
+
+    private void requestLocationPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            //Ask for permission
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //We need to show user a dialog for displaying why the permission is needed and then ask for the permission...
+                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+            }
+        }
     }
 
     private void navigateBasedOnAccountType() {
@@ -52,5 +85,9 @@ public class WelcomeFragment extends Fragment {
         } else {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_welcomeFragment_to_parentFragment);
         }
+    }
+
+    private boolean checkAgreementCache() {
+        return sf.getPref("agreement_accepted", requireContext()) != null;
     }
 }
