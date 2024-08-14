@@ -16,4 +16,5 @@
     <string name="childs">Childs</string>
     <string name="masukkan_kode_pairing">Masukkan Kode Pairing</string>
     <string name="save">Simpan</string>
+    <string name="google_map_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDCM0gMyC9oVbrpMTRyUvC06Iz79BUKrkw</string>
 </resources>
