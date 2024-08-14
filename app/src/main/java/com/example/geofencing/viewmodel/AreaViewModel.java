@@ -16,7 +16,7 @@ public class AreaViewModel extends ViewModel {
     private final MutableLiveData<List<Polygon>> areasLiveData;
     private final MutableLiveData<Boolean> saveSuccessLiveData;
     private final MutableLiveData<List<Polygon>> unassignedPolygonsLiveData;
-
+    private final MutableLiveData<List<Polygon>> childPolygonsLiveData;
 
 
     public AreaViewModel() {
@@ -24,7 +24,7 @@ public class AreaViewModel extends ViewModel {
         areasLiveData = new MutableLiveData<>();
         saveSuccessLiveData = new MutableLiveData<>();
         unassignedPolygonsLiveData = new MutableLiveData<>();
-
+        childPolygonsLiveData = new MutableLiveData<>();
     }
 
     public LiveData<Boolean> getSaveSuccessLiveData() {
@@ -93,5 +93,37 @@ public class AreaViewModel extends ViewModel {
 
     public LiveData<List<Polygon>> getUnassignedPolygonsLiveData() {
         return unassignedPolygonsLiveData;
+    }
+
+    public LiveData<List<Polygon>> getChildPolygonsLiveData() {
+        return childPolygonsLiveData;
+    }
+
+    public void fetchChildPolygons(String childUid) {
+        repository.fetchChildPolygons(childUid, new AreaRepository.FetchChildPolygonsCallback() {
+            @Override
+            public void onChildPolygonsFetched(List<Polygon> polygons) {
+                childPolygonsLiveData.postValue(polygons);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                childPolygonsLiveData.postValue(null);
+            }
+        });
+    }
+
+    public void deletePolygonFromChild(String childUid, String polygonName) {
+        repository.deletePolygonFromChild(childUid, polygonName, new AreaRepository.DeletePolygonCallback() {
+            @Override
+            public void onSuccess() {
+                // Handle success if needed
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle failure if needed
+            }
+        });
     }
 }

@@ -17,7 +17,15 @@ public class PolygonAdapter extends RecyclerView.Adapter<PolygonAdapter.PolygonV
 
     private List<Polygon> polygonList;
     private OnItemClickListener onItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
 
+    public interface OnItemLongClickListener {
+        void onItemLongClick(Polygon polygon);
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.onItemLongClickListener = listener;
+    }
     public interface OnItemClickListener {
         void onItemClick(int position, Polygon polygon);
     }
@@ -45,6 +53,13 @@ public class PolygonAdapter extends RecyclerView.Adapter<PolygonAdapter.PolygonV
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(position,polygon);
             }
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (onItemLongClickListener != null) {
+                onItemLongClickListener.onItemLongClick(polygon);
+            }
+            return true;
         });
     }
 
