@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_navigation_area_to_addAreaFragment"
             app:destination="@id/addAreaFragment" />
+        <action
+            android:id="@+id/action_navigation_area_to_detailAreaFragment"
+            app:destination="@id/detailAreaFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_childs"
@@ -54,4 +57,9 @@
         android:name="com.example.geofencing.ui.parent.childs.ChildAreaFragment"
         android:label="fragment_child_area"
         tools:layout="@layout/fragment_child_area" />
+    <fragment
+        android:id="@+id/detailAreaFragment"
+        android:name="com.example.geofencing.ui.parent.area.DetailAreaFragment"
+        android:label="fragment_detail_area"
+        tools:layout="@layout/fragment_detail_area" />
 </navigation>

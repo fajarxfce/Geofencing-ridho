@@ -5,12 +5,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentDetailAreaBinding;
+import com.example.geofencing.model.CustomLatLng;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,6 +27,7 @@ import java.util.List;
 
 public class DetailAreaFragment extends Fragment {
 
+    private static final String TAG = "DetailAreaFragment";
     private FragmentDetailAreaBinding binding;
     private GoogleMap mMap;
     private List<LatLng> points = new ArrayList<>();
@@ -32,6 +36,17 @@ public class DetailAreaFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
+
+            ArrayList<CustomLatLng> customLatlng = getArguments().getParcelableArrayList("points");
+
+            if (customLatlng != null) {
+                for (CustomLatLng customLatLng : customLatlng) {
+                    LatLng latLng = new LatLng(customLatLng.getLatitude(), customLatLng.getLongitude());
+                    points.add(latLng);
+                }
+            }
+
+            drawPolygon();
         }
     };
 
@@ -52,8 +67,6 @@ public class DetailAreaFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
-
-
     }
 
     private void drawPolygon() {

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import com.example.geofencing.R;
 import com.example.geofencing.adapter.PolygonAdapter;
 import com.example.geofencing.databinding.FragmentAreaBinding;
+import com.example.geofencing.model.CustomLatLng;
 import com.example.geofencing.model.Polygon;
 import com.example.geofencing.viewmodel.AreaViewModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +56,16 @@ public class AreaFragment extends Fragment {
         viewModel.getAreasLiveData().observe(getViewLifecycleOwner(), areas -> {
             if (areas != null) {
                 updateRecyclerView(areas);
+                polygonAdapter.setOnItemClickListener(new PolygonAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position, Polygon polygon) {
+                        Bundle args = new Bundle();
+                        ArrayList<Parcelable> points = new ArrayList<>(polygon.getPoints());
+                        args.putParcelableArrayList("points", points);
+                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment_parent)
+                                .navigate(R.id.action_navigation_area_to_detailAreaFragment, args);
+                    }
+                });
             }
         });
 
