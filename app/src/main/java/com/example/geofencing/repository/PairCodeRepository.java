@@ -10,7 +10,7 @@ public class PairCodeRepository {
     private final DatabaseReference databaseReference;
 
     public PairCodeRepository() {
-        databaseReference = FirebaseDatabase.getInstance().getReference("pair_codes");
+        databaseReference = FirebaseDatabase.getInstance().getReference("child_pair_code");
     }
 
     public interface PairCodeCallback {

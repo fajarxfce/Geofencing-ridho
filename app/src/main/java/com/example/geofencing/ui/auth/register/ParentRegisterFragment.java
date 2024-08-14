@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,10 @@ public class ParentRegisterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         parentRegisterViewModel = new ViewModelProvider(this).get(ParentRegisterViewModel.class);
         binding.register.setOnClickListener(v -> {
+            if (!validateForm()) {
+                return;
+            }
+
             parentRegisterViewModel.register(
                     binding.txtEmail.getText().toString(),
                     binding.txtPassword.getText().toString()
@@ -51,5 +56,37 @@ public class ParentRegisterFragment extends Fragment {
                 Toast.makeText(getActivity(), "Registration Failed: " + error, Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    private boolean validateForm() {
+        boolean result = true;
+        if (TextUtils.isEmpty(binding.txtEmail.getText().toString())) {
+            binding.txtEmail.setError("Silahkan masukkan email valid");
+            result = false;
+        } else {
+            binding.txtEmail.setError(null);
+        }
+
+        if (TextUtils.isEmpty(binding.txtPassword.getText().toString())) {
+            binding.txtPassword.setError("Silahkan masukkan password valid");
+            result = false;
+        } else {
+            binding.txtPassword.setError(null);
+        }
+
+        // Min 6
+        if(binding.txtPassword.getText().toString().length() < 6) {
+            Toast.makeText(requireContext(), "Password min 6 karakter",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        // Must contain @
+        if(!binding.txtEmail.getText().toString().contains("@")) {
+            Toast.makeText(requireContext(), "Email harus mengandung @",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return result;
     }
 }

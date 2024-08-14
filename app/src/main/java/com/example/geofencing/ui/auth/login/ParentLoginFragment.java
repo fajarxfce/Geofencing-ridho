@@ -29,7 +29,8 @@ public class ParentLoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.loginSignupBtn.setOnClickListener(v -> {
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_parentLoginFragment_to_parentFragment);
+//            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_parentLoginFragment_to_parentFragment);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_parentLoginFragment_to_parentRegisterFragment);
         });
     }
 }
