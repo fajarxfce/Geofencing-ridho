@@ -5,15 +5,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.geofencing.repository.AuthChildRepository;
-import com.example.geofencing.repository.AuthParentRepository;
 import com.google.firebase.auth.FirebaseUser;
 
-public class ChildRegisterViewModel extends ViewModel {
+public class ChildViewModel extends ViewModel {
     private final AuthChildRepository repository;
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
 
-    public ChildRegisterViewModel() {
+    public ChildViewModel() {
         repository = new AuthChildRepository();
         userLiveData = repository.getUserLiveData();
         errorLiveData = repository.getErrorLiveData();
@@ -29,5 +28,9 @@ public class ChildRegisterViewModel extends ViewModel {
 
     public LiveData<String> getErrorLiveData() {
         return errorLiveData;
+    }
+
+    public void login(String email, String password) {
+        repository.login(email, password);
     }
 }

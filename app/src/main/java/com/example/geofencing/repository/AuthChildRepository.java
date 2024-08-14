@@ -41,6 +41,18 @@ public class AuthChildRepository {
                 });
     }
 
+    public void login(String email, String password) {
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        userLiveData.postValue(user);
+                    } else {
+                        errorLiveData.postValue(task.getException().getMessage());
+                    }
+                });
+    }
+
     private void saveChildData(FirebaseUser user) {
         String uid = user.getUid();
         String email = user.getEmail();

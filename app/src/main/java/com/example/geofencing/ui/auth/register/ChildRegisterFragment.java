@@ -13,15 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentChildRegisterBinding;
-import com.example.geofencing.viewmodel.ChildRegisterViewModel;
-import com.example.geofencing.viewmodel.ParentRegisterViewModel;
+import com.example.geofencing.viewmodel.ChildViewModel;
 
 public class ChildRegisterFragment extends Fragment {
 
     private FragmentChildRegisterBinding binding;
-    private ChildRegisterViewModel viewModel;
+    private ChildViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +32,7 @@ public class ChildRegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(ChildRegisterViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChildViewModel.class);
         binding.register.setOnClickListener(v -> {
             if (!validateForm()) {
                 return;
