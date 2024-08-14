@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.geofencing.model.Child;
+import com.example.geofencing.model.LocationHistory;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -32,9 +33,11 @@ public class ChildRepository {
     private final MutableLiveData<String> errorSaveLiveData;
     private final MutableLiveData<String> successSaveLiveData;
     private final MutableLiveData<List<Child>> childrenLiveData;
+    private final MutableLiveData<List<LocationHistory>> locationHistoryLiveData;
     private final DatabaseReference DBchilds;
     private final DatabaseReference DBpairCode;
     private final DatabaseReference DBparents;
+    private final DatabaseReference DBHistory;
 
     public ChildRepository() {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -43,18 +46,22 @@ public class ChildRepository {
         errorSaveLiveData = new MutableLiveData<>();
         successSaveLiveData = new MutableLiveData<>();
         childrenLiveData = new MutableLiveData<>(new ArrayList<>());
+        locationHistoryLiveData = new MutableLiveData<>();
         DBchilds = FirebaseDatabase.getInstance().getReference("childs");
         DBpairCode = FirebaseDatabase.getInstance().getReference("child_pair_code");
         DBparents = FirebaseDatabase.getInstance().getReference("parents");
+        DBHistory = FirebaseDatabase.getInstance().getReference("location_history");
     }
 
     public interface PairCodeCallback {
         void onExist(Child child);
+
         void onNotExist();
     }
 
     public interface ChildrenCallback {
         void onChildrenFetched(List<Child> children);
+
         void onError(String error);
     }
 
@@ -111,7 +118,7 @@ public class ChildRepository {
         return successSaveLiveData;
     }
 
-    private int generatePairCode(){
+    private int generatePairCode() {
         Random rnd = new Random();
         int number = rnd.nextInt(999999);
         return number;
@@ -167,21 +174,47 @@ public class ChildRepository {
     public void fetchChildren(String parentUid) {
         DBparents.child(parentUid)
                 .child("childs").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Child> children = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Child child = snapshot.getValue(Child.class);
-                    children.add(child);
-                }
-                childrenLiveData.postValue(children);
-            }
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<Child> children = new ArrayList<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Child child = snapshot.getValue(Child.class);
+                            children.add(child);
+                        }
+                        childrenLiveData.postValue(children);
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
+    }
+
+    public void fetchLocationHistory(String childUid) {
+        DBHistory
+                .child(childUid)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<LocationHistory> historyList = new ArrayList<>();
+                        for (DataSnapshot historySnapshot : snapshot.getChildren()) {
+                            String message = historySnapshot.getValue(String.class);
+                            historyList.add(new LocationHistory(message));
+
+                        }
+                        locationHistoryLiveData.postValue(historyList);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Handle possible errors.
+                    }
+                });
+    }
+
+    public MutableLiveData<List<LocationHistory>> getLocationHistoryLiveData() {
+        return locationHistoryLiveData;
     }
 
     public LiveData<List<Child>> getChildrenLiveData() {
@@ -200,6 +233,7 @@ public class ChildRepository {
 
     public interface DeleteChildCallback {
         void onSuccess();
+
         void onFailure(String errorMessage);
     }
 

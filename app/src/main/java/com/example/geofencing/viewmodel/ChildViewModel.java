@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.geofencing.model.Child;
+import com.example.geofencing.model.LocationHistory;
 import com.example.geofencing.repository.ChildRepository;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -19,6 +20,7 @@ public class ChildViewModel extends ViewModel {
     private final MutableLiveData<String> successSaveLiveData;
     private final MutableLiveData<String> errorSaveLiveData;
     private final MutableLiveData<List<Child>> childrenLiveData;
+    private final MutableLiveData<List<LocationHistory>> locationHistoryLiveData;
 
     public ChildViewModel() {
         repository = new ChildRepository();
@@ -26,6 +28,7 @@ public class ChildViewModel extends ViewModel {
         errorLiveData = repository.getErrorLiveData();
         successSaveLiveData = repository.getSuccessSaveLiveData();
         errorSaveLiveData = repository.getErrorSaveLiveData();
+        locationHistoryLiveData = repository.getLocationHistoryLiveData();
         childrenLiveData = new MutableLiveData<>();
     }
 
@@ -100,5 +103,13 @@ public class ChildViewModel extends ViewModel {
                 // Handle failure if needed
             }
         });
+    }
+
+    public LiveData<List<LocationHistory>> getLocationHistoryLiveData() {
+        return locationHistoryLiveData;
+    }
+
+    public void fetchLocationHistory(String childUid) {
+        repository.fetchLocationHistory(childUid);
     }
 }
