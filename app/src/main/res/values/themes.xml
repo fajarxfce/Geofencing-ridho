@@ -3,7 +3,14 @@
     <style name="Base.Theme.Geofencing" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/light_blue</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Theme.Geofencing" parent="Base.Theme.Geofencing" />
+    <style name="Theme.Geofencing" parent="Base.Theme.Geofencing" >
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/light_blue</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 </resources>
