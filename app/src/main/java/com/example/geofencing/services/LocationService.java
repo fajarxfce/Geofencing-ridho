@@ -25,6 +25,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.PolyUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,17 @@ public class LocationService extends Service {
     private static final String TAG = "LocationService";
     private PolygonRepository repository;
     private MutableLiveData<Map<String, List<LatLng>>> polygonPoints = new MutableLiveData<>();
+    private LocationListener locationListener;
+    private Boolean lastStatus = null;
+    private String currentPolygonName = "";
+
+    public interface LocationListener {
+        void onLocationChanged(boolean inside, String name);
+    }
+
+    private void setLocationListener(LocationListener locationListener) {
+        this.locationListener = locationListener;
+    }
 
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
@@ -45,14 +57,26 @@ public class LocationService extends Service {
                 double longitude = locationResult.getLastLocation().getLongitude();
                 LatLng currentLocation = new LatLng(latitude, longitude);
 
+                boolean insideAnyPolygon = false;
+                String polygonName = "";
                 Map<String, List<LatLng>> polygons = polygonPoints.getValue();
                 if (polygons != null) {
                     for (Map.Entry<String, List<LatLng>> entry : polygons.entrySet()) {
-                        Log.d(TAG, "Polygon ID: " + entry.getKey());
-                        for (LatLng point : entry.getValue()) {
-                            Log.d(TAG, "Point: " + point.latitude + ", " + point.longitude);
+                        List<LatLng> polygon = entry.getValue();
+                        polygonName = entry.getKey();
+                        if (PolyUtil.containsLocation(currentLocation.latitude, currentLocation.longitude, polygon, true)) {
+                            insideAnyPolygon = true;
+                            break;
                         }
                     }
+                }
+
+                if (lastStatus == null || insideAnyPolygon != lastStatus || !polygonName.equals(currentPolygonName)) {
+                    if (locationListener != null) {
+                        locationListener.onLocationChanged(insideAnyPolygon, polygonName);
+                    }
+                    lastStatus = insideAnyPolygon;
+                    currentPolygonName = polygonName;
                 }
 
             }
@@ -64,6 +88,13 @@ public class LocationService extends Service {
         super.onCreate();
         repository = new PolygonRepository();
         repository.fetchPolygonData(polygonPoints);
+
+        setLocationListener(new LocationListener() {
+            @Override
+            public void onLocationChanged(boolean inside, String name) {
+                Log.d(TAG, "onLocationChanged: " + inside + " " + name);
+            }
+        });
     }
 
     @Nullable
