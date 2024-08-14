@@ -96,21 +96,11 @@ public class AreaViewModel extends ViewModel {
     }
 
     public LiveData<List<Polygon>> getChildPolygonsLiveData() {
-        return childPolygonsLiveData;
+        return repository.getChildPolygonsLiveData();
     }
 
     public void fetchChildPolygons(String childUid) {
-        repository.fetchChildPolygons(childUid, new AreaRepository.FetchChildPolygonsCallback() {
-            @Override
-            public void onChildPolygonsFetched(List<Polygon> polygons) {
-                childPolygonsLiveData.postValue(polygons);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                childPolygonsLiveData.postValue(null);
-            }
-        });
+        repository.fetchChildPolygons(childUid);
     }
 
     public void deletePolygonFromChild(String childUid, String polygonName) {

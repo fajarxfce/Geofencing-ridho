@@ -1,5 +1,8 @@
 package com.example.geofencing.repository;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.geofencing.model.CustomLatLng;
 import com.example.geofencing.model.Polygon;
 import com.google.android.gms.maps.model.LatLng;
@@ -17,9 +20,11 @@ import java.util.Map;
 
 public class AreaRepository {
     private final DatabaseReference databaseReference;
-
+    private final MutableLiveData<List<Polygon>> childPolygonsLiveData;
     public AreaRepository() {
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        childPolygonsLiveData = new MutableLiveData<>(new ArrayList<>());
+
     }
 
     public void saveArea(String polygonName, List<LatLng> points, SaveAreaCallback callback) {
@@ -127,12 +132,14 @@ public class AreaRepository {
                 });
     }
 
-
-    public void fetchChildPolygons(String childUid, FetchChildPolygonsCallback callback) {
+    public LiveData<List<Polygon>> getChildPolygonsLiveData() {
+        return childPolygonsLiveData;
+    }
+    public void fetchChildPolygons(String childUid) {
         databaseReference.child("childs")
                 .child(childUid)
                 .child("polygons")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         List<Polygon> polygons = new ArrayList<>();
@@ -145,12 +152,12 @@ public class AreaRepository {
                             }
                             polygons.add(new Polygon(name, points));
                         }
-                        callback.onChildPolygonsFetched(polygons);
+                        childPolygonsLiveData.postValue(polygons);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        callback.onError(databaseError.getMessage());
+
                     }
                 });
     }
