@@ -7,21 +7,23 @@ import androidx.lifecycle.ViewModel;
 import com.example.geofencing.repository.AuthParentRepository;
 import com.google.firebase.auth.FirebaseUser;
 
-public class ParentRegisterViewModel extends ViewModel {
-    private final AuthParentRepository authParentRepository;
+public class ParentViewModel extends ViewModel {
+    private final AuthParentRepository repository;
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
 
-    public ParentRegisterViewModel() {
-        authParentRepository = new AuthParentRepository();
-        userLiveData = authParentRepository.getUserLiveData();
-        errorLiveData = authParentRepository.getErrorLiveData();
+    public ParentViewModel() {
+        repository = new AuthParentRepository();
+        userLiveData = repository.getUserLiveData();
+        errorLiveData = repository.getErrorLiveData();
     }
 
     public void register(String email, String password) {
-        authParentRepository.register(email, password);
+        repository.register(email, password);
     }
-
+    public void login(String email, String password) {
+        repository.login(email, password);
+    }
     public LiveData<FirebaseUser> getUserLiveData() {
         return userLiveData;
     }
