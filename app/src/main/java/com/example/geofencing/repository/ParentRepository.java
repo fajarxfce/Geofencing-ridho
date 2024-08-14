@@ -1,30 +1,25 @@
 package com.example.geofencing.repository;
 
-import static com.example.geofencing.helper.StringHelper.usernameFromEmail;
-
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.geofencing.model.Child;
+import com.example.geofencing.model.Parent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import static com.example.geofencing.helper.StringHelper.usernameFromEmail;
 
-import java.util.Random;
-
-public class AuthChildRepository {
+public class ParentRepository {
     private final FirebaseAuth firebaseAuth;
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
-    private final DatabaseReference DBchilds;
-    private final DatabaseReference DBpairCode;
+    private final DatabaseReference databaseReference;
 
-    public AuthChildRepository() {
+    public ParentRepository() {
         firebaseAuth = FirebaseAuth.getInstance();
         userLiveData = new MutableLiveData<>();
         errorLiveData = new MutableLiveData<>();
-        DBchilds = FirebaseDatabase.getInstance().getReference("childs");
-        DBpairCode = FirebaseDatabase.getInstance().getReference("child_pair_code");
+        databaseReference = FirebaseDatabase.getInstance().getReference("parents");
     }
 
     public void register(String email, String password) {
@@ -33,7 +28,7 @@ public class AuthChildRepository {
                     if (task.isSuccessful()) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         userLiveData.postValue(firebaseAuth.getCurrentUser());
-                        saveChildData(user);
+                        saveParentData(user);
                         firebaseAuth.signOut();
                     } else {
                         errorLiveData.postValue(task.getException().getMessage());
@@ -53,15 +48,17 @@ public class AuthChildRepository {
                 });
     }
 
-    private void saveChildData(FirebaseUser user) {
+    public void logout() {
+        firebaseAuth.signOut();
+        userLiveData.postValue(null);
+    }
+
+    private void saveParentData(FirebaseUser user) {
         String uid = user.getUid();
         String email = user.getEmail();
         String username = usernameFromEmail(user.getEmail());
-        int pairCode = generatePairCode();
-        Child child = new Child(username, email, uid);
-        DBchilds.child(user.getUid()).setValue(child);
-        DBpairCode.child(String.valueOf(pairCode))
-                .setValue(child);
+        Parent parent = new Parent(uid, email, username);
+        databaseReference.child(user.getUid()).setValue(parent);
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {
@@ -72,9 +69,5 @@ public class AuthChildRepository {
         return errorLiveData;
     }
 
-    private int generatePairCode(){
-        Random rnd = new Random();
-        int number = rnd.nextInt(999999);
-        return number;
-    }
+
 }

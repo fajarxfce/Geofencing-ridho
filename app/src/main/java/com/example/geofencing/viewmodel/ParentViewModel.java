@@ -4,16 +4,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.geofencing.repository.AuthParentRepository;
+import com.example.geofencing.repository.ParentRepository;
 import com.google.firebase.auth.FirebaseUser;
 
 public class ParentViewModel extends ViewModel {
-    private final AuthParentRepository repository;
+    private final ParentRepository repository;
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
 
     public ParentViewModel() {
-        repository = new AuthParentRepository();
+        repository = new ParentRepository();
         userLiveData = repository.getUserLiveData();
         errorLiveData = repository.getErrorLiveData();
     }

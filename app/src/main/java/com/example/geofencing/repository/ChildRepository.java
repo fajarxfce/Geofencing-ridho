@@ -1,25 +1,37 @@
 package com.example.geofencing.repository;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.example.geofencing.model.Parent;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import static com.example.geofencing.helper.StringHelper.usernameFromEmail;
 
-public class AuthParentRepository {
+import androidx.lifecycle.MutableLiveData;
+
+import com.example.geofencing.model.Child;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Random;
+
+public class ChildRepository {
     private final FirebaseAuth firebaseAuth;
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
-    private final DatabaseReference databaseReference;
+    private final DatabaseReference DBchilds;
+    private final DatabaseReference DBpairCode;
 
-    public AuthParentRepository() {
+    public ChildRepository() {
         firebaseAuth = FirebaseAuth.getInstance();
         userLiveData = new MutableLiveData<>();
         errorLiveData = new MutableLiveData<>();
-        databaseReference = FirebaseDatabase.getInstance().getReference("parents");
+        DBchilds = FirebaseDatabase.getInstance().getReference("childs");
+        DBpairCode = FirebaseDatabase.getInstance().getReference("child_pair_code");
+    }
+
+    public interface PairCodeCallback {
+        void onPairCodeChecked(boolean exists);
     }
 
     public void register(String email, String password) {
@@ -28,7 +40,7 @@ public class AuthParentRepository {
                     if (task.isSuccessful()) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         userLiveData.postValue(firebaseAuth.getCurrentUser());
-                        saveParentData(user);
+                        saveChildData(user);
                         firebaseAuth.signOut();
                     } else {
                         errorLiveData.postValue(task.getException().getMessage());
@@ -48,17 +60,15 @@ public class AuthParentRepository {
                 });
     }
 
-    public void logout() {
-        firebaseAuth.signOut();
-        userLiveData.postValue(null);
-    }
-
-    private void saveParentData(FirebaseUser user) {
+    private void saveChildData(FirebaseUser user) {
         String uid = user.getUid();
         String email = user.getEmail();
         String username = usernameFromEmail(user.getEmail());
-        Parent parent = new Parent(uid, email, username);
-        databaseReference.child(user.getUid()).setValue(parent);
+        int pairCode = generatePairCode();
+        Child child = new Child(username, email, uid);
+        DBchilds.child(user.getUid()).setValue(child);
+        DBpairCode.child(String.valueOf(pairCode))
+                .setValue(child);
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {
@@ -69,5 +79,23 @@ public class AuthParentRepository {
         return errorLiveData;
     }
 
+    private int generatePairCode(){
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        return number;
+    }
 
+    public void checkPairCode(String pairCode, PairCodeCallback callback) {
+        DBpairCode.child(pairCode).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                callback.onPairCodeChecked(dataSnapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onPairCodeChecked(false);
+            }
+        });
+    }
 }

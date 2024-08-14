@@ -1,7 +1,6 @@
 package com.example.geofencing.ui.parent.childs;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.geofencing.databinding.DialogEnterChildPaircodeBinding;
-import com.example.geofencing.viewmodel.PairCodeViewModel;
+import com.example.geofencing.viewmodel.ChildViewModel;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public class EnterChildPairCodeDialog extends DialogFragment {
 
     private static final String TAG = "EnterAreaNameDialog";
     DialogEnterChildPaircodeBinding binding;
-    private PairCodeViewModel viewModel;
+    private ChildViewModel viewModel;
     public EnterChildPairCodeDialog() {
     }
 
@@ -47,7 +46,7 @@ public class EnterChildPairCodeDialog extends DialogFragment {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
 
-        viewModel = new ViewModelProvider(this).get(PairCodeViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChildViewModel.class);
         binding.btnSubmit.setOnClickListener(view1 -> {
             String pairCode = binding.txtAreaName.getText().toString();
             if (pairCode.isEmpty()) {
@@ -67,7 +66,7 @@ public class EnterChildPairCodeDialog extends DialogFragment {
             if (exists) {
                 Toast.makeText(getContext(), "Pair code exists", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "Pair code does not exist", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Kode pairing tidak ditemukan!", Toast.LENGTH_SHORT).show();
             }
         });
     }
