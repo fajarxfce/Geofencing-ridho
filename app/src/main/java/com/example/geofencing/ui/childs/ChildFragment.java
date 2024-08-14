@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +23,11 @@ import android.widget.Toast;
 
 import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentChildBinding;
+import com.example.geofencing.model.CustomLatLng;
+import com.example.geofencing.model.Polygon;
 import com.example.geofencing.services.LocationService;
 import com.example.geofencing.utils.Contstants;
+import com.example.geofencing.viewmodel.AreaViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,7 +36,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChildFragment extends Fragment {
 
@@ -40,6 +50,8 @@ public class ChildFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
     private int FINE_LOCATION_ACCESS_REQUEST_CODE = 10001;
+    private AreaViewModel viewModel;
+    private FirebaseAuth mAuth;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
@@ -47,6 +59,21 @@ public class ChildFragment extends Fragment {
             mMap = googleMap;
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             enableUserLocation();
+
+            String childUid = mAuth.getCurrentUser().getUid();
+            viewModel.fetchChildPolygons(childUid);
+            viewModel.getChildPolygonsLiveData().observe(getViewLifecycleOwner(), polygons -> {
+                if (polygons != null) {
+                    for (Polygon polygon : polygons) {
+                        List<LatLng> points = new ArrayList<>();
+                        for (CustomLatLng customLatLng : polygon.getPoints()) {
+                            points.add(new LatLng(customLatLng.getLatitude(), customLatLng.getLongitude()));
+                        }
+                        mMap.addPolygon(new PolygonOptions().addAll(points).strokeColor(Color.RED).fillColor(Color.argb(128, 255, 0, 0)));
+                    }
+                }
+            });
+
         }
     };
 
@@ -114,6 +141,8 @@ public class ChildFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(AreaViewModel.class);
+        mAuth = FirebaseAuth.getInstance();
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
