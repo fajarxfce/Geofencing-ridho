@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.geofencing.R;
+import com.example.geofencing.helper.StringHelper;
 import com.example.geofencing.repository.PolygonRepository;
 import com.example.geofencing.utils.Contstants;
 import com.example.geofencing.viewmodel.PolygonViewModel;
@@ -25,8 +26,11 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.android.PolyUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +42,7 @@ public class LocationService extends Service {
     private LocationListener locationListener;
     private Boolean lastStatus = null;
     private String currentPolygonName = "";
+    private FirebaseAuth mAuth;
 
     public interface LocationListener {
         void onLocationChanged(boolean inside, String name);
@@ -88,11 +93,29 @@ public class LocationService extends Service {
         super.onCreate();
         repository = new PolygonRepository();
         repository.fetchPolygonData(polygonPoints);
+        mAuth = FirebaseAuth.getInstance();
 
         setLocationListener(new LocationListener() {
             @Override
             public void onLocationChanged(boolean inside, String name) {
                 Log.d(TAG, "onLocationChanged: " + inside + " " + name);
+
+                String email = mAuth.getCurrentUser().getEmail();
+                Date now = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String timestamp = formatter.format(now);
+
+                String childName = StringHelper.usernameFromEmail(email);
+                String body = "";
+
+                if (inside) {
+                    body = "[ " + timestamp + " ]" + " : Anak anda " + childName + " berada di dalam " + name;
+                    repository.saveLocationHistory(body);
+                } else {
+                    body = "[ " + timestamp + " ]" + " : Anak anda " + childName + " keluar dari area";
+                    repository.saveLocationHistory(body);
+                }
+
             }
         });
     }

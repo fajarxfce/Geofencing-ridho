@@ -20,11 +20,12 @@ import java.util.Map;
 
 public class PolygonRepository {
     private static final String TAG = "PolygonRepository";
-    private DatabaseReference childRef;
+    private DatabaseReference childRef, historyRef;
     private FirebaseAuth mAuth;
 
     public PolygonRepository() {
         childRef = FirebaseDatabase.getInstance().getReference("childs");
+        historyRef = FirebaseDatabase.getInstance().getReference("location_history");
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -55,5 +56,12 @@ public class PolygonRepository {
                         // Handle possible errors.
                     }
                 });
+    }
+
+    public void saveLocationHistory(String message) {
+        String childUid = mAuth.getCurrentUser().getUid();
+        historyRef
+                .child(childUid)
+                .push().setValue(message);
     }
 }
