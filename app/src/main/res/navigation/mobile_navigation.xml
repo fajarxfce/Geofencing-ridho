@@ -77,7 +77,11 @@
         android:id="@+id/parentFragment"
         android:name="com.example.geofencing.ui.parent.ParentFragment"
         android:label="fragment_parent"
-        tools:layout="@layout/fragment_parent" />
+        tools:layout="@layout/fragment_parent" >
+        <action
+            android:id="@+id/action_parentFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/childFragment"
         android:name="com.example.geofencing.ui.childs.ChildFragment"

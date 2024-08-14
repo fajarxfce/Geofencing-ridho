@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
     @Override
     public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
-        if (navDestination.getId() == R.id.welcomeFragment) {
+        if (navDestination.getId() == R.id.welcomeFragment
+        || navDestination.getId() == R.id.splashScreenragment) {
             getSupportActionBar().hide();
         } else {
             getSupportActionBar().show();

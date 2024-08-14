@@ -24,6 +24,9 @@ public class ParentViewModel extends ViewModel {
     public void login(String email, String password) {
         repository.login(email, password);
     }
+    public void logout() {
+        repository.logout();
+    }
     public LiveData<FirebaseUser> getUserLiveData() {
         return userLiveData;
     }

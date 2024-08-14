@@ -48,6 +48,11 @@ public class AuthParentRepository {
                 });
     }
 
+    public void logout() {
+        firebaseAuth.signOut();
+        userLiveData.postValue(null);
+    }
+
     private void saveParentData(FirebaseUser user) {
         String uid = user.getUid();
         String email = user.getEmail();
