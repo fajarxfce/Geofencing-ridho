@@ -34,6 +34,7 @@ public class ChildRepository {
     private final MutableLiveData<String> errorSaveLiveData;
     private final MutableLiveData<String> successSaveLiveData;
     private final MutableLiveData<List<Child>> childrenLiveData;
+    private final MutableLiveData<Child> childLiveData;
     private final MutableLiveData<List<LocationHistory>> locationHistoryLiveData;
     private final MutableLiveData<LatLng> coordinatesLiveData;
     private final DatabaseReference DBchilds;
@@ -50,6 +51,7 @@ public class ChildRepository {
         childrenLiveData = new MutableLiveData<>(new ArrayList<>());
         locationHistoryLiveData = new MutableLiveData<>();
         coordinatesLiveData = new MutableLiveData<>();
+        childLiveData = new MutableLiveData<>();
         DBchilds = FirebaseDatabase.getInstance().getReference("childs");
         DBpairCode = FirebaseDatabase.getInstance().getReference("child_pair_code");
         DBparents = FirebaseDatabase.getInstance().getReference("parents");
@@ -127,7 +129,11 @@ public class ChildRepository {
         return number;
     }
 
-    public void checkPairCode(String pairCode, PairCodeCallback callback) {
+    public MutableLiveData<Child> getChildLiveData() {
+        return childLiveData;
+    }
+
+    public void checkPairCode(String pairCode) {
         DBpairCode.child(pairCode).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -137,15 +143,17 @@ public class ChildRepository {
                     String username = dataSnapshot.child("username").getValue(String.class);
 
                     Child child = new Child(username, email, childId, pairCode);
-                    callback.onExist(child);
+                    childLiveData.postValue(child);
+                    Log.d(TAG, "checkchild: childexist");
                 } else {
-                    callback.onNotExist();
+                    childLiveData.postValue(null);
+                    Log.d(TAG, "checkchild: childnotexist");
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                callback.onNotExist();
+                childLiveData.postValue(null);
             }
         });
     }
@@ -186,7 +194,7 @@ public class ChildRepository {
                         if (task.isSuccessful()) {
                             successSaveLiveData.postValue("Anak berhasil disimpan");
                         } else {
-                            errorSaveLiveData.postValue("Kode pairing tidak ditemukan");
+                            errorSaveLiveData.postValue("Anak gagal disimpan");
                         }
                     }
                 })

@@ -16,13 +16,14 @@ public class ChildViewModel extends ViewModel {
     private final ChildRepository repository;
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
-    private final MutableLiveData<Child> childLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Child> childLiveData;
     private final MutableLiveData<Boolean> pairCodeExists = new MutableLiveData<>();
     private final MutableLiveData<String> successSaveLiveData;
     private final MutableLiveData<String> errorSaveLiveData;
     private final MutableLiveData<List<Child>> childrenLiveData;
     private final MutableLiveData<List<LocationHistory>> locationHistoryLiveData;
     private final MutableLiveData<LatLng> coordinatesLiveData;
+    private final MutableLiveData<Child> childLExistLiveData;
 
 
     public ChildViewModel() {
@@ -33,9 +34,13 @@ public class ChildViewModel extends ViewModel {
         errorSaveLiveData = repository.getErrorSaveLiveData();
         locationHistoryLiveData = repository.getLocationHistoryLiveData();
         coordinatesLiveData = repository.getCoordinatesLiveData();
+        childLExistLiveData = repository.getChildLiveData();
         childrenLiveData = new MutableLiveData<>();
+        childLiveData = repository.getChildLiveData();
     }
-
+    public LiveData<Child> getChildExistLiveData() {
+        return childLiveData;
+    }
     public void register(String email, String password) {
         repository.register(email, password);
     }
@@ -61,18 +66,7 @@ public class ChildViewModel extends ViewModel {
     }
 
     public void checkPairCode(String pairCode) {
-        repository.checkPairCode(pairCode, new ChildRepository.PairCodeCallback() {
-            @Override
-            public void onExist(Child child) {
-                pairCodeExists.postValue(true);
-                childLiveData.postValue(child);
-            }
-
-            @Override
-            public void onNotExist() {
-                pairCodeExists.postValue(false);
-            }
-        });
+        repository.checkPairCode(pairCode);
     }
 
     public void saveChildToParent(String parentUid, String childUid, Child child) {

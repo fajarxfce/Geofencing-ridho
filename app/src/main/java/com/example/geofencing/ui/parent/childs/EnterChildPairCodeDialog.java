@@ -2,6 +2,7 @@ package com.example.geofencing.ui.parent.childs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,14 @@ import com.example.geofencing.viewmodel.ChildViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.apache.commons.logging.LogFactory;
+
 import java.util.List;
 
 public class EnterChildPairCodeDialog extends DialogFragment {
 
     private static final String TAG = "EnterAreaNameDialog";
+    private static final org.apache.commons.logging.Log log = LogFactory.getLog(EnterChildPairCodeDialog.class);
     DialogEnterChildPaircodeBinding binding;
     private ChildViewModel viewModel;
     private FirebaseAuth Auth;
@@ -69,10 +73,19 @@ public class EnterChildPairCodeDialog extends DialogFragment {
         });
 
         viewModel.getChildLiveData().observe(getViewLifecycleOwner(), child -> {
-            String parentUid = Auth.getCurrentUser().getUid();
-            String pairCode = binding.txtAreaName.getText().toString().trim();
-            viewModel.saveChildToParent(parentUid, pairCode, child);
-            viewModel.saveParentToChild(fcmToken, child);
+
+            if (child != null) {
+                String parentUid = Auth.getCurrentUser().getUid();
+                viewModel.saveChildToParent(parentUid, child.getPairCode(), child);
+                viewModel.saveParentToChild(fcmToken, child);
+            }else {
+                Toast.makeText(requireContext(), "Kode pairing tidak ditemukan!", Toast.LENGTH_SHORT).show();
+            }
+//            if (child != null) {
+//                String parentUid = Auth.getCurrentUser().getUid();
+//                viewModel.saveChildToParent(parentUid, child.getPairCode(), child);
+//                viewModel.saveParentToChild(fcmToken, child);
+//            }
         });
 
         viewModel.getSuccessSaveLiveData().observe(getViewLifecycleOwner(), s -> {
@@ -81,7 +94,7 @@ public class EnterChildPairCodeDialog extends DialogFragment {
         });
 
         viewModel.getErrorSaveLiveData().observe(getViewLifecycleOwner(), s -> {
-            Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Kode pairing tidak ditemukan!", Toast.LENGTH_SHORT).show();
         });
     }
 
