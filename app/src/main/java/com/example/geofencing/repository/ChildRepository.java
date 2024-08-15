@@ -174,6 +174,30 @@ public class ChildRepository {
                 });
     }
 
+    public void saveParentToChild(String fcmToken, Child child) {
+        DBchilds
+                .child(child.getChildId())
+                .child("parent_fcm_tokens")
+                .child(firebaseAuth.getUid())
+                .setValue(fcmToken)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            successSaveLiveData.postValue("Anak berhasil disimpan");
+                        } else {
+                            errorSaveLiveData.postValue("Kode pairing tidak ditemukan");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        errorSaveLiveData.postValue("Kode pairing tidak ditemukan");
+                    }
+                });
+    }
+
     public void fetchChildren(String parentUid) {
         DBparents.child(parentUid)
                 .child("childs").addValueEventListener(new ValueEventListener() {

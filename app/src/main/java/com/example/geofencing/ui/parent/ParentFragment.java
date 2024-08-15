@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentParentBinding;
+import com.example.geofencing.utils.SharedPreferencesUtil;
 import com.example.geofencing.utils.TokenUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,6 +32,7 @@ public class ParentFragment extends Fragment {
 
     private static final String TAG = "ParentFragment";
     private FragmentParentBinding binding;
+    private SharedPreferencesUtil sf;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +44,7 @@ public class ParentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sf = new SharedPreferencesUtil(requireContext());
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_account, R.id.navigation_area, R.id.navigation_childs)
                 .build();
@@ -68,6 +71,7 @@ public class ParentFragment extends Fragment {
                         }
                         String token = task.getResult();
                         Log.d(TAG, "onComplete: "+token);
+                        sf.setPref("parent_fcm_token", token, requireContext());
                     }
                 });
     }

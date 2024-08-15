@@ -79,6 +79,10 @@ public class ChildViewModel extends ViewModel {
         repository.saveChildToParent(parentUid, childUid, child);
     }
 
+    public void saveParentToChild(String fcmToken, Child child) {
+        repository.saveParentToChild(fcmToken, child);
+    }
+
     public LiveData<String> getSuccessSaveLiveData() {
         return successSaveLiveData;
     }

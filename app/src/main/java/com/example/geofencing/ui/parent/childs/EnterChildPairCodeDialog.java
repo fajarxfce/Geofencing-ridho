@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.geofencing.databinding.DialogEnterChildPaircodeBinding;
+import com.example.geofencing.utils.SharedPreferencesUtil;
 import com.example.geofencing.viewmodel.ChildViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +27,7 @@ public class EnterChildPairCodeDialog extends DialogFragment {
     DialogEnterChildPaircodeBinding binding;
     private ChildViewModel viewModel;
     private FirebaseAuth Auth;
+    private SharedPreferencesUtil sf;
     public EnterChildPairCodeDialog() {
     }
 
@@ -47,7 +49,9 @@ public class EnterChildPairCodeDialog extends DialogFragment {
         if (dialog != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
+        sf = new SharedPreferencesUtil(requireContext());
         Auth = FirebaseAuth.getInstance();
+        String fcmToken = sf.getPref("parent_fcm_token", requireContext());
         viewModel = new ViewModelProvider(this).get(ChildViewModel.class);
         binding.btnSubmit.setOnClickListener(view1 -> {
             String pairCode = binding.txtAreaName.getText().toString();
@@ -68,6 +72,7 @@ public class EnterChildPairCodeDialog extends DialogFragment {
             String parentUid = Auth.getCurrentUser().getUid();
             String pairCode = binding.txtAreaName.getText().toString().trim();
             viewModel.saveChildToParent(parentUid, pairCode, child);
+            viewModel.saveParentToChild(fcmToken, child);
         });
 
         viewModel.getSuccessSaveLiveData().observe(getViewLifecycleOwner(), s -> {
