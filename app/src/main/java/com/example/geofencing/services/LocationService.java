@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -18,8 +19,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.geofencing.R;
 import com.example.geofencing.helper.StringHelper;
+import com.example.geofencing.model.SendNotification;
 import com.example.geofencing.repository.PolygonRepository;
 import com.example.geofencing.utils.Contstants;
+import com.example.geofencing.utils.TokenUtil;
 import com.example.geofencing.viewmodel.PolygonViewModel;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -110,18 +113,22 @@ public class LocationService extends Service {
                 String timestamp = formatter.format(now);
 
                 String childName = StringHelper.usernameFromEmail(email);
-                String body = "";
+                String body = generateNotificationBody(inside, timestamp, childName, name);
+                repository.saveLocationHistory(body);
 
-                if (inside) {
-                    body = "[ " + timestamp + " ]" + " : Anak anda " + childName + " berada di dalam " + name;
-                    repository.saveLocationHistory(body);
-                } else {
-                    body = "[ " + timestamp + " ]" + " : Anak anda " + childName + " keluar dari area";
-                    repository.saveLocationHistory(body);
-                }
+                SendNotificationTask task = new SendNotificationTask("dfOwVrL1SoG-2tGiOa7D65:APA91bE8cYAHZOZV-tql-JCVtNhHrdeobdihCkazFZACNgOIbZJ3NFiSQKTvR9DkROKnVfYcYj8UvmwYZK2c9niFQH16MRZPCJJ-2vXYB0aq7aZuYPKQwv17gJzZvpOCRrKMFoO6_Ves", "Geofencing", body);
+                task.execute();
 
             }
         });
+    }
+
+    private String generateNotificationBody(boolean inside, String timestamp, String childName, String name) {
+        if (inside) {
+            return "[ " + timestamp + " ]" + " : Anak anda " + childName + " berada di dalam " + name;
+        } else {
+            return "[ " + timestamp + " ]" + " : Anak anda " + childName + " keluar dari area";
+        }
     }
 
     @Nullable
@@ -183,5 +190,37 @@ public class LocationService extends Service {
             }
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    private class SendNotificationTask extends AsyncTask<Void, Void, String> {
+
+        private String userFcmToken;
+        private String title;
+        private String body;
+
+        public SendNotificationTask(String userFcmToken, String title, String body) {
+            this.userFcmToken = userFcmToken;
+            this.title = title;
+            this.body = body;
+
+        }
+        @Override
+        protected String doInBackground(Void... voids) {
+            return TokenUtil.getAccessToken();
+        }
+
+        @Override
+        protected void onPostExecute(String accessToken) {
+            if (accessToken != null) {
+                String userFcmToken = this.userFcmToken; // Replace with actual parent FCM token
+                String title = this.title;
+                String body = this.body;
+
+                SendNotification sendNotification = new SendNotification(accessToken, userFcmToken, title, body);
+                sendNotification.sendNotification();
+            } else {
+                Log.e(TAG, "Failed to get access token");
+            }
+        }
     }
 }
