@@ -198,6 +198,30 @@ public class ChildRepository {
                 });
     }
 
+    public void fetchParentFcmTokens(String childUid, MutableLiveData<List<String>> parentFcmTokensLiveData) {
+        DBchilds.child(childUid)
+                .child("parent_fcm_tokens")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> parentFcmTokens = new ArrayList<>();
+                for (DataSnapshot tokenSnapshot : snapshot.getChildren()) {
+                    String token = tokenSnapshot.getValue(String.class);
+                    Log.d(TAG, "fetch-token: "+token);
+                    if (token != null) {
+                        parentFcmTokens.add(token);
+                    }
+                }
+                parentFcmTokensLiveData.postValue(parentFcmTokens);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle possible errors.
+            }
+        });
+    }
+
     public void fetchChildren(String parentUid) {
         DBparents.child(parentUid)
                 .child("childs").addValueEventListener(new ValueEventListener() {

@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.geofencing.R;
 import com.example.geofencing.helper.StringHelper;
 import com.example.geofencing.model.SendNotification;
+import com.example.geofencing.repository.ChildRepository;
 import com.example.geofencing.repository.PolygonRepository;
 import com.example.geofencing.utils.Contstants;
 import com.example.geofencing.utils.TokenUtil;
@@ -41,11 +42,14 @@ public class LocationService extends Service {
 
     private static final String TAG = "LocationService";
     private PolygonRepository repository;
+    private ChildRepository childRepository;
+    private MutableLiveData<List<String>> parentFcmTokensLiveData = new MutableLiveData<>();
     private MutableLiveData<Map<String, List<LatLng>>> polygonPoints = new MutableLiveData<>();
     private LocationListener locationListener;
     private Boolean lastStatus = null;
     private String currentPolygonName = "";
     private FirebaseAuth mAuth;
+    private List<String> fcmTokens;
 
     public interface LocationListener {
         void onLocationChanged(boolean inside, String name);
@@ -99,8 +103,18 @@ public class LocationService extends Service {
     public void onCreate() {
         super.onCreate();
         repository = new PolygonRepository();
+        childRepository = new ChildRepository();
         repository.fetchPolygonData(polygonPoints);
         mAuth = FirebaseAuth.getInstance();
+        childRepository.fetchParentFcmTokens(mAuth.getUid(), parentFcmTokensLiveData);
+        parentFcmTokensLiveData.observeForever(parentFcmTokens -> {
+            if (parentFcmTokens != null) {
+                fcmTokens = parentFcmTokens;
+                for (String parentFcmToken : parentFcmTokens) {
+                    Log.d(TAG, "parent-fcm-token: "+parentFcmToken);
+                }
+            }
+        });
 
         setLocationListener(new LocationListener() {
             @Override
@@ -114,10 +128,12 @@ public class LocationService extends Service {
 
                 String childName = StringHelper.usernameFromEmail(email);
                 String body = generateNotificationBody(inside, timestamp, childName, name);
+                String title = "Location Service";
                 repository.saveLocationHistory(body);
 
-                SendNotificationTask task = new SendNotificationTask("dfOwVrL1SoG-2tGiOa7D65:APA91bE8cYAHZOZV-tql-JCVtNhHrdeobdihCkazFZACNgOIbZJ3NFiSQKTvR9DkROKnVfYcYj8UvmwYZK2c9niFQH16MRZPCJJ-2vXYB0aq7aZuYPKQwv17gJzZvpOCRrKMFoO6_Ves", "Geofencing", body);
-                task.execute();
+                for (String parentFcmToken : fcmTokens) {
+                    new SendNotificationTask(parentFcmToken, title, body).execute();
+                }
 
             }
         });
