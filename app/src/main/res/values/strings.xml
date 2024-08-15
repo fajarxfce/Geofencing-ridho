@@ -20,4 +20,14 @@
     <string name="masukkan_nama_polygon">Masukkan nama area</string>
     <string name="simpan">Simpan</string>
     <string name="pilih_area">Pilih area</string>
+    <string name="login_anak">Login Anak</string>
+    <string name="login_orang_tua">Login Orang Tua</string>
+    <string name="registrasi_orang_tua">Registrasi Orang Tua</string>
+    <string name="registrasi_anak">Registrasi Anak</string>
+    <string name="akun">Akun</string>
+    <string name="anak">Anak</string>
+    <string name="lokasi_anak">Lokasi Anak</string>
+    <string name="list_area_anak">List Area Anak</string>
+    <string name="riwayat_lokasi_anak">Riwayat Lokasi Anak</string>
+    <string name="detail_area">Detail Area</string>
 </resources>

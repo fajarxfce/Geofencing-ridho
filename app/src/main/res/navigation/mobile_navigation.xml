@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/childLoginFragment"
         android:name="com.example.geofencing.ui.auth.login.ChildLoginFragment"
-        android:label="fragment_child_login"
+        android:label="@string/login_anak"
         tools:layout="@layout/fragment_child_login" >
         <action
             android:id="@+id/action_childLoginFragment_to_childRegisterFragment"
@@ -54,7 +54,7 @@
     <fragment
         android:id="@+id/parentLoginFragment"
         android:name="com.example.geofencing.ui.auth.login.ParentLoginFragment"
-        android:label="fragment_parent_login"
+        android:label="@string/login_orang_tua"
         tools:layout="@layout/fragment_parent_login" >
         <action
             android:id="@+id/action_parentLoginFragment_to_parentRegisterFragment"
@@ -66,12 +66,12 @@
     <fragment
         android:id="@+id/childRegisterFragment"
         android:name="com.example.geofencing.ui.auth.register.ChildRegisterFragment"
-        android:label="fragment_child_register"
+        android:label="@string/registrasi_anak"
         tools:layout="@layout/fragment_child_register" />
     <fragment
         android:id="@+id/parentRegisterFragment"
         android:name="com.example.geofencing.ui.auth.register.ParentRegisterFragment"
-        android:label="fragment_parent_register"
+        android:label="@string/registrasi_orang_tua"
         tools:layout="@layout/fragment_parent_register" />
     <fragment
         android:id="@+id/parentFragment"

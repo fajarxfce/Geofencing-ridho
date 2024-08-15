@@ -81,11 +81,6 @@ public class EnterChildPairCodeDialog extends DialogFragment {
             }else {
                 Toast.makeText(requireContext(), "Kode pairing tidak ditemukan!", Toast.LENGTH_SHORT).show();
             }
-//            if (child != null) {
-//                String parentUid = Auth.getCurrentUser().getUid();
-//                viewModel.saveChildToParent(parentUid, child.getPairCode(), child);
-//                viewModel.saveParentToChild(fcmToken, child);
-//            }
         });
 
         viewModel.getSuccessSaveLiveData().observe(getViewLifecycleOwner(), s -> {

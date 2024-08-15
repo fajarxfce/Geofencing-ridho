@@ -8,12 +8,12 @@
     <fragment
         android:id="@+id/navigation_account"
         android:name="com.example.geofencing.ui.parent.account.AccountFragment"
-        android:label="fragment_account"
+        android:label="@string/akun"
         tools:layout="@layout/fragment_account" />
     <fragment
         android:id="@+id/navigation_area"
         android:name="com.example.geofencing.ui.parent.area.AreaFragment"
-        android:label="fragment_area"
+        android:label="@string/area"
         tools:layout="@layout/fragment_area" >
         <action
             android:id="@+id/action_navigation_area_to_addAreaFragment"
@@ -25,7 +25,7 @@
     <fragment
         android:id="@+id/navigation_childs"
         android:name="com.example.geofencing.ui.parent.childs.ChildsFragment"
-        android:label="fragment_childs"
+        android:label="@string/anak"
         tools:layout="@layout/fragment_childs" >
         <action
             android:id="@+id/action_navigation_childs_to_childLocationFragment"
@@ -45,21 +45,21 @@
     <fragment
         android:id="@+id/childHistoryLocationFragment"
         android:name="com.example.geofencing.ui.parent.childs.ChildHistoryLocationFragment"
-        android:label="fragment_child_history_location"
+        android:label="@string/riwayat_lokasi_anak"
         tools:layout="@layout/fragment_child_history_location" />
     <fragment
         android:id="@+id/childLocationFragment"
         android:name="com.example.geofencing.ui.parent.childs.ChildLocationFragment"
-        android:label="fragment_child_location"
+        android:label="@string/lokasi_anak"
         tools:layout="@layout/fragment_child_location" />
     <fragment
         android:id="@+id/childAreaFragment"
         android:name="com.example.geofencing.ui.parent.childs.ChildAreaFragment"
-        android:label="fragment_child_area"
+        android:label="@string/list_area_anak"
         tools:layout="@layout/fragment_child_area" />
     <fragment
         android:id="@+id/detailAreaFragment"
         android:name="com.example.geofencing.ui.parent.area.DetailAreaFragment"
-        android:label="fragment_detail_area"
+        android:label="@string/detail_area"
         tools:layout="@layout/fragment_detail_area" />
 </navigation>
