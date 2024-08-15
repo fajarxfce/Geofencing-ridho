@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.example.geofencing.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class WelcomeFragment extends Fragment {
+    private static final String TAG = "WelcomeFragment";
     private FragmentWelcomeBinding binding;
     private FirebaseAuth mAuth;
     private SharedPreferencesUtil sf;
@@ -35,6 +37,7 @@ public class WelcomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "onViewCreated: ");
         mAuth = FirebaseAuth.getInstance();
         sf = new SharedPreferencesUtil(requireContext());
         binding.btnLoginChild.setOnClickListener(v -> {

@@ -38,7 +38,7 @@ public class AccountFragment extends Fragment {
         binding.txtUser.setText(email);
         viewModel.getUserLiveData().observe(getViewLifecycleOwner(), firebaseUser -> {
             if (firebaseUser == null) {
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_parentFragment_to_welcomeFragment);
+//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_parentFragment_to_welcomeFragment);
             }
         });
     }

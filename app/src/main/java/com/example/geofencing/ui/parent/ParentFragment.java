@@ -58,6 +58,7 @@ public class ParentFragment extends Fragment {
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(navView, navController);
         NavigationUI.setupActionBarWithNavController((AppCompatActivity) getActivity(), navController, appBarConfiguration);
+
     }
 
     private void logRegToken() {
