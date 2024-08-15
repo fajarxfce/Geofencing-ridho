@@ -1,6 +1,7 @@
 package com.example.geofencing.ui.welcome;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -16,8 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.geofencing.MainActivity;
 import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentWelcomeBinding;
+import com.example.geofencing.ui.childs.ChildFragment;
 import com.example.geofencing.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -41,10 +44,10 @@ public class WelcomeFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         sf = new SharedPreferencesUtil(requireContext());
         binding.btnLoginChild.setOnClickListener(v -> {
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_welcomeFragment_to_childLoginFragment);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_welcomeFragment2_to_childLoginFragment2);
         });
         binding.btnLoginParent.setOnClickListener(v -> {
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_welcomeFragment_to_parentLoginFragment);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_welcomeFragment2_to_parentLoginFragment2);
         });
 
         if (!checkAgreementCache()){
@@ -84,9 +87,16 @@ public class WelcomeFragment extends Fragment {
     private void navigateBasedOnAccountType() {
         String accountType = sf.getPref("account_type", requireContext());
         if ("child".equals(accountType)) {
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_welcomeFragment_to_childFragment);
+//            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_welcomeFragment2_to_childFragment2);
+            Intent intent = new Intent(getActivity(), ChildFragment.class);
+
+            getActivity().finish();
+            startActivity(intent);
         } else {
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_welcomeFragment_to_parentFragment);
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+
+            getActivity().finish();
+            startActivity(intent);
         }
     }
 

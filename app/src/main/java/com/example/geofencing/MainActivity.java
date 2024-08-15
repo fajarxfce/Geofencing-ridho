@@ -28,31 +28,45 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbar);
-
+//        setSupportActionBar(binding.toolbar);
+//        if (getSupportActionBar() != null) {
+//
+//        }
 //        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 //        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
-        navController = navHostFragment.getNavController();
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+//        navController = navHostFragment.getNavController();
+//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        navController.addOnDestinationChangedListener(this);
+
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_account, R.id.navigation_area,R.id.navigation_childs)
+                .build();
+
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(binding.navView, navController);
+
         navController.addOnDestinationChangedListener(this);
+
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
+        navController.navigateUp();
+        return super.onSupportNavigateUp();
     }
 
 
     @Override
     public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
-        if (navDestination.getId() == R.id.welcomeFragment
-        || navDestination.getId() == R.id.splashScreenragment) {
-            getSupportActionBar().hide();
-        } else {
-            getSupportActionBar().show();
-        }
+//        if (navDestination.getId() == R.id.splashScreenragment2
+//        || navDestination.getId() == R.id.welcomeFragment2) {
+//            getSupportActionBar().hide();
+//        } else {
+//            getSupportActionBar().show();
+//        }
     }
 }

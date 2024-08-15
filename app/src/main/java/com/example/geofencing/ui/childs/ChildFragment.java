@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.geofencing.R;
+import com.example.geofencing.databinding.ActivityMainBinding;
 import com.example.geofencing.databinding.FragmentChildBinding;
 import com.example.geofencing.model.CustomLatLng;
 import com.example.geofencing.model.Polygon;
@@ -43,7 +45,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChildFragment extends Fragment {
+public class ChildFragment extends AppCompatActivity {
 
     private FragmentChildBinding binding;
     private GoogleMap mMap;
@@ -62,7 +64,7 @@ public class ChildFragment extends Fragment {
 
             String childUid = mAuth.getCurrentUser().getUid();
             viewModel.fetchChildPolygons(childUid);
-            viewModel.getChildPolygonsLiveData().observe(getViewLifecycleOwner(), polygons -> {
+            viewModel.getChildPolygonsLiveData().observe(ChildFragment.this, polygons -> {
                 if (polygons != null) {
                     for (Polygon polygon : polygons) {
                         List<LatLng> points = new ArrayList<>();
@@ -79,17 +81,17 @@ public class ChildFragment extends Fragment {
 
     private void startLocationService() {
         if (!isLocationServiceRunning()) {
-            Intent intent = new Intent(getContext(), LocationService.class);
+            Intent intent = new Intent(this, LocationService.class);
             intent.setAction(Contstants.ACTION_START_LOCATION_SERVICE);
-            getActivity().startService(intent);
-            Toast.makeText(requireContext(), "Location service started", Toast.LENGTH_SHORT).show();
+            startService(intent);
+            Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(requireContext(), "Location service is already running", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Location service is already running", Toast.LENGTH_SHORT).show();
         }
     }
 
     private boolean isLocationServiceRunning() {
-        ActivityManager activityManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         if (activityManager != null) {
             for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
                 if (LocationService.class.getName().equals(service.service.getClassName())) {
@@ -103,23 +105,23 @@ public class ChildFragment extends Fragment {
     }
 
     private void enableUserLocation() {
-        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             getLastLocation();
             startLocationService();
         } else {
             //Ask for permission
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
                 //We need to show user a dialog for displaying why the permission is needed and then ask for the permission...
-                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
             } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
             }
         }
     }
 
     private void getLastLocation() {
-        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
             Task<Location> task = fusedLocationProviderClient.getLastLocation();
             task.addOnSuccessListener(location -> {
                 if (location != null) {
@@ -132,22 +134,18 @@ public class ChildFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentChildBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentChildBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(AreaViewModel.class);
         mAuth = FirebaseAuth.getInstance();
         SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext());
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 }

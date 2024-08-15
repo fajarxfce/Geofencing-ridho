@@ -1,5 +1,6 @@
 package com.example.geofencing.ui.auth.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.geofencing.MainActivity;
 import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentChildLoginBinding;
+import com.example.geofencing.ui.childs.ChildFragment;
 import com.example.geofencing.utils.SharedPreferencesUtil;
 import com.example.geofencing.viewmodel.ChildViewModel;
 
@@ -39,7 +42,7 @@ public class ChildLoginFragment extends Fragment {
         sf = new SharedPreferencesUtil(requireContext());
         binding.register.setOnClickListener(v -> {
 
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_childLoginFragment_to_childRegisterFragment);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_childLoginFragment2_to_childRegisterFragment2);
         });
 
         binding.login.setOnClickListener(v -> {
@@ -57,7 +60,10 @@ public class ChildLoginFragment extends Fragment {
             if (firebaseUser != null) {
                 Toast.makeText(getActivity(), "Login berhasil", Toast.LENGTH_SHORT).show();
                 sf.setPref("account_type", "child", requireContext());
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_childLoginFragment_to_childFragment);
+                Intent intent = new Intent(getActivity(), ChildFragment.class);
+                startActivity(intent);
+                getActivity().finish();
+//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_childLoginFragment_to_childFragment);
             }
         });
 

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_navigation"
+    app:startDestination="@id/splashScreenragment2">
+
+    <fragment
+        android:id="@+id/splashScreenragment2"
+        android:name="com.example.geofencing.ui.splashscreen.SplashScreenragment"
+        android:label="fragment_splash_screenragment"
+        tools:layout="@layout/fragment_splash_screenragment" >
+        <action
+            android:id="@+id/action_splashScreenragment2_to_welcomeFragment2"
+            app:destination="@id/welcomeFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/welcomeFragment2"
+        android:name="com.example.geofencing.ui.welcome.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment2_to_childLoginFragment2"
+            app:destination="@id/childLoginFragment2" />
+        <action
+            android:id="@+id/action_welcomeFragment2_to_parentLoginFragment2"
+            app:destination="@id/parentLoginFragment2" />
+        <action
+            android:id="@+id/action_welcomeFragment2_to_childFragment2"
+            app:destination="@id/childFragment2" />
+        <action
+            android:id="@+id/action_welcomeFragment2_to_parentFragment2"
+            app:destination="@id/parentFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/childLoginFragment2"
+        android:name="com.example.geofencing.ui.auth.login.ChildLoginFragment"
+        android:label="ChildLoginFragment" >
+        <action
+            android:id="@+id/action_childLoginFragment2_to_childRegisterFragment2"
+            app:destination="@id/childRegisterFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/parentLoginFragment2"
+        android:name="com.example.geofencing.ui.auth.login.ParentLoginFragment"
+        android:label="ParentLoginFragment" >
+        <action
+            android:id="@+id/action_parentLoginFragment2_to_parentRegisterFragment2"
+            app:destination="@id/parentRegisterFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/childRegisterFragment2"
+        android:name="com.example.geofencing.ui.auth.register.ChildRegisterFragment"
+        android:label="ChildRegisterFragment" />
+    <fragment
+        android:id="@+id/parentRegisterFragment2"
+        android:name="com.example.geofencing.ui.auth.register.ParentRegisterFragment"
+        android:label="ParentRegisterFragment" />
+    <fragment
+        android:id="@+id/childFragment2"
+        android:name="com.example.geofencing.ui.childs.ChildFragment"
+        android:label="fragment_child"
+        tools:layout="@layout/fragment_child" />
+    <fragment
+        android:id="@+id/parentFragment2"
+        android:name="com.example.geofencing.ui.parent.ParentFragment"
+        android:label="fragment_parent"
+        tools:layout="@layout/fragment_parent" />
+</navigation>

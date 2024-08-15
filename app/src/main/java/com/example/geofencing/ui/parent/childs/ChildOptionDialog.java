@@ -43,15 +43,15 @@ public class ChildOptionDialog extends DialogFragment {
                 case 0:
                     // Lihat Lokasi Anak
 
-                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment_parent).navigate(R.id.action_navigation_childs_to_childLocationFragment, bundle);
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_navigation_childs_to_childLocationFragment, bundle);
                     break;
                 case 1:
                     // Lihat Riwayat Lokasi
-                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment_parent).navigate(R.id.action_navigation_childs_to_childHistoryLocationFragment, bundle);
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_navigation_childs_to_childHistoryLocationFragment, bundle);
                     break;
                 case 2:
                     // List Polygon
-                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment_parent).navigate(R.id.action_navigation_childs_to_childAreaFragment, bundle);
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_navigation_childs_to_childAreaFragment, bundle);
 
                     break;
                 case 3:

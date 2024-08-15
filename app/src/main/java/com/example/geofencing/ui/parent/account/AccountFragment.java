@@ -1,5 +1,6 @@
 package com.example.geofencing.ui.parent.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentAccountBinding;
+import com.example.geofencing.ui.auth.AuthActivity;
 import com.example.geofencing.viewmodel.ParentViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -38,7 +40,9 @@ public class AccountFragment extends Fragment {
         binding.txtUser.setText(email);
         viewModel.getUserLiveData().observe(getViewLifecycleOwner(), firebaseUser -> {
             if (firebaseUser == null) {
-//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_parentFragment_to_welcomeFragment);
+                Intent intent = new Intent(getActivity(), AuthActivity.class);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
     }

@@ -62,7 +62,7 @@ public class AreaFragment extends Fragment {
                         Bundle args = new Bundle();
                         ArrayList<Parcelable> points = new ArrayList<>(polygon.getPoints());
                         args.putParcelableArrayList("points", points);
-                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment_parent)
+                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main)
                                 .navigate(R.id.action_navigation_area_to_detailAreaFragment, args);
                     }
                 });

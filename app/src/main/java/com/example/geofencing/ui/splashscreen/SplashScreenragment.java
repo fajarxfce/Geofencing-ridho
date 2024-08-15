@@ -42,7 +42,7 @@ public class SplashScreenragment extends Fragment implements NetworkChangeReceiv
     public void onNetworkChange(boolean isConnected) {
         if (isConnected) {
             new Handler().postDelayed(() -> {
-                Navigation.findNavController(requireView()).navigate(R.id.action_splashScreenragment_to_welcomeFragment);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_splashScreenragment2_to_welcomeFragment2);
             }, 2000);
         } else {
             Toast.makeText(requireContext(), "Tidak ada koneksi internet", Toast.LENGTH_LONG).show();
