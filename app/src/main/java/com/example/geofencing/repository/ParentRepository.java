@@ -31,7 +31,13 @@ public class ParentRepository {
                         saveParentData(user);
                         firebaseAuth.signOut();
                     } else {
-                        errorLiveData.postValue(task.getException().getMessage());
+                        String error = task.getException().getMessage();
+                        if (error.contains("email address is already in use")) {
+                            error = "Email sudah digunakan";
+                        }else if (error.contains("The email address is badly formatted.")) {
+                            error = "Format email salah";
+                        }
+                        errorLiveData.postValue(error);
                     }
                 });
     }

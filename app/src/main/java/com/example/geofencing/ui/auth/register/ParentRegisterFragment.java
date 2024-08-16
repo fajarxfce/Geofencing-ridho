@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentParentRegisterBinding;
 import com.example.geofencing.viewmodel.ParentViewModel;
 
@@ -47,7 +49,7 @@ public class ParentRegisterFragment extends Fragment {
         parentViewModel.getUserLiveData().observe(getViewLifecycleOwner(), firebaseUser -> {
             if (firebaseUser != null) {
                 Toast.makeText(getActivity(), "Pendaftaran berhasil", Toast.LENGTH_SHORT).show();
-
+//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_parentRegisterFragment2_to_parentLoginFragment2);
             }
         });
 

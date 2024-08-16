@@ -29,10 +29,8 @@ public class AuthActivity extends AppCompatActivity implements NavController.OnD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: ");
         binding = ActivityAuthBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        setSupportActionBar(binding.toolbar);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_auth);
         navController = navHostFragment.getNavController();
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -49,8 +47,13 @@ public class AuthActivity extends AppCompatActivity implements NavController.OnD
 
     @Override
     public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
-        if (navDestination.getId() == R.id.welcomeFragment2
-                || navDestination.getId() == R.id.splashScreenragment2) {
+        if (navDestination.getId() == R.id.splashScreenragment2 || navDestination.getId() == R.id.welcomeFragment2) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        if (navDestination.getId() == R.id.splashScreenragment2){
             getSupportActionBar().hide();
         } else {
             getSupportActionBar().show();

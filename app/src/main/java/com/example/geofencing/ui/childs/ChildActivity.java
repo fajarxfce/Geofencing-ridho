@@ -64,7 +64,13 @@ public class ChildActivity extends AppCompatActivity {
                         for (CustomLatLng customLatLng : polygon.getPoints()) {
                             points.add(new LatLng(customLatLng.getLatitude(), customLatLng.getLongitude()));
                         }
-                        mMap.addPolygon(new PolygonOptions().addAll(points).strokeColor(Color.RED).fillColor(Color.argb(128, 255, 0, 0)));
+                        mMap.addPolygon(
+                                new PolygonOptions()
+                                        .addAll(points)
+                                        .strokeColor(Color.RED)
+                                        .fillColor(Color.argb(128, 255, 0, 0)
+                                        )
+                        );
                     }
                 }
             });
