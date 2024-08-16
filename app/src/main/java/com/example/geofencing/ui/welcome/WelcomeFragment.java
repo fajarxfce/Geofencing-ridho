@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import com.example.geofencing.MainActivity;
 import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentWelcomeBinding;
-import com.example.geofencing.ui.childs.ChildFragment;
+import com.example.geofencing.ui.childs.ChildActivity;
 import com.example.geofencing.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -88,7 +88,7 @@ public class WelcomeFragment extends Fragment {
         String accountType = sf.getPref("account_type", requireContext());
         if ("child".equals(accountType)) {
 //            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_welcomeFragment2_to_childFragment2);
-            Intent intent = new Intent(getActivity(), ChildFragment.class);
+            Intent intent = new Intent(getActivity(), ChildActivity.class);
 
             getActivity().finish();
             startActivity(intent);

@@ -58,9 +58,9 @@
         android:label="ParentRegisterFragment" />
     <fragment
         android:id="@+id/childFragment2"
-        android:name="com.example.geofencing.ui.childs.ChildFragment"
+        android:name="com.example.geofencing.ui.childs.ChildActivity"
         android:label="fragment_child"
-        tools:layout="@layout/fragment_child" />
+        tools:layout="@layout/activity_child" />
     <fragment
         android:id="@+id/parentFragment2"
         android:name="com.example.geofencing.ui.parent.ParentFragment"

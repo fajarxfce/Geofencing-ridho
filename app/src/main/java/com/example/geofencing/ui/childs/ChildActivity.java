@@ -9,22 +9,16 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.geofencing.R;
-import com.example.geofencing.databinding.ActivityMainBinding;
-import com.example.geofencing.databinding.FragmentChildBinding;
+import com.example.geofencing.databinding.ActivityChildBinding;
 import com.example.geofencing.model.CustomLatLng;
 import com.example.geofencing.model.Polygon;
 import com.example.geofencing.services.LocationService;
@@ -37,7 +31,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,9 +38,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChildFragment extends AppCompatActivity {
+public class ChildActivity extends AppCompatActivity {
 
-    private FragmentChildBinding binding;
+    private ActivityChildBinding binding;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
@@ -64,7 +57,7 @@ public class ChildFragment extends AppCompatActivity {
 
             String childUid = mAuth.getCurrentUser().getUid();
             viewModel.fetchChildPolygons(childUid);
-            viewModel.getChildPolygonsLiveData().observe(ChildFragment.this, polygons -> {
+            viewModel.getChildPolygonsLiveData().observe(ChildActivity.this, polygons -> {
                 if (polygons != null) {
                     for (Polygon polygon : polygons) {
                         List<LatLng> points = new ArrayList<>();
@@ -137,7 +130,7 @@ public class ChildFragment extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = FragmentChildBinding.inflate(getLayoutInflater());
+        binding = ActivityChildBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(AreaViewModel.class);
         mAuth = FirebaseAuth.getInstance();

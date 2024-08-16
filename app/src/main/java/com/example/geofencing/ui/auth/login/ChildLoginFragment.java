@@ -15,10 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.geofencing.MainActivity;
 import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentChildLoginBinding;
-import com.example.geofencing.ui.childs.ChildFragment;
+import com.example.geofencing.ui.childs.ChildActivity;
 import com.example.geofencing.utils.SharedPreferencesUtil;
 import com.example.geofencing.viewmodel.ChildViewModel;
 
@@ -60,7 +59,7 @@ public class ChildLoginFragment extends Fragment {
             if (firebaseUser != null) {
                 Toast.makeText(getActivity(), "Login berhasil", Toast.LENGTH_SHORT).show();
                 sf.setPref("account_type", "child", requireContext());
-                Intent intent = new Intent(getActivity(), ChildFragment.class);
+                Intent intent = new Intent(getActivity(), ChildActivity.class);
                 startActivity(intent);
                 getActivity().finish();
 //                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_childLoginFragment_to_childFragment);

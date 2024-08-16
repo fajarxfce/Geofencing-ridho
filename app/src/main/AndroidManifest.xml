@@ -24,7 +24,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.childs.ChildFragment"
+            android:name=".ui.childs.ChildActivity"
             android:exported="false" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
