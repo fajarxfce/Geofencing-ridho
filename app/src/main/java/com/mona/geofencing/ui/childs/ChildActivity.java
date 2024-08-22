@@ -148,6 +148,13 @@ public class ChildActivity extends AppCompatActivity {
             mapFragment.getMapAsync(callback);
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
+        binding.fabInfo.setOnClickListener(v -> {
+            String uuid = mAuth.getCurrentUser().getUid();
+            Bundle args = new Bundle();
+            args.putString("child_uuid", uuid);
+            ChildInfoDialog dialog = new ChildInfoDialog();
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(), "child_info_dialog");
+        });
     }
 }

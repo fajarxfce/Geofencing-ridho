@@ -277,6 +277,27 @@ public class ChildRepository {
                 });
     }
 
+    public void getChildrenData(String uuid){
+        DBchilds
+                .child(uuid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String username = snapshot.child("username").getValue(String.class);
+                String email = snapshot.child("email").getValue(String.class);
+                String childId = snapshot.child("childId").getValue(String.class);
+                String pairCode = snapshot.child("pairCode").getValue(String.class);
+                Child child = new Child(username, email, childId, pairCode);
+                Log.d(TAG, "onDataChange: "+pairCode);
+                childLiveData.postValue(child);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle possible errors.
+            }
+        });
+    }
+
     public MutableLiveData<List<LocationHistory>> getLocationHistoryLiveData() {
         return locationHistoryLiveData;
     }

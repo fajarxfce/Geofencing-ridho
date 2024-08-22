@@ -14,6 +14,9 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         this.listener = listener;
     }
 
+    public NetworkChangeReceiver() {
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {

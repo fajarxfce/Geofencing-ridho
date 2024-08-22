@@ -118,4 +118,9 @@ public class ChildViewModel extends ViewModel {
     public void fetchLocationHistory(String childUid) {
         repository.fetchLocationHistory(childUid);
     }
+
+    public void getChildrenData(String uuid) {
+        repository.getChildrenData(uuid);
+    }
+
 }
