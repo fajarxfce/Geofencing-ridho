@@ -55,7 +55,12 @@ public class ChildRegisterFragment extends Fragment {
 
         viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), error -> {
             if (error != null) {
-                Toast.makeText(getActivity(), "Pendaftaran Gagal: " + error, Toast.LENGTH_SHORT).show();
+                if (error.contains("email address is already in use")) {
+                    error = "Email sudah digunakan";
+                } else if (error.contains("The email address is badly formatted.")) {
+                    error = "Format email salah";
+                }
+                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -77,13 +82,13 @@ public class ChildRegisterFragment extends Fragment {
         }
 
         // Min 6
-        if(binding.txtPassword.getText().toString().length() < 6) {
+        if (binding.txtPassword.getText().toString().length() < 6) {
             Toast.makeText(requireContext(), "Password min 6 karakter",
                     Toast.LENGTH_SHORT).show();
         }
 
         // Must contain @
-        if(!binding.txtEmail.getText().toString().contains("@")) {
+        if (!binding.txtEmail.getText().toString().contains("@")) {
             Toast.makeText(requireContext(), "Email harus mengandung @",
                     Toast.LENGTH_SHORT).show();
         }

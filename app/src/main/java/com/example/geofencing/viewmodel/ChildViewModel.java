@@ -16,6 +16,7 @@ public class ChildViewModel extends ViewModel {
     private final ChildRepository repository;
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
+    private final MutableLiveData<String> deleteLiveData;
     private final MutableLiveData<Child> childLiveData;
     private final MutableLiveData<Boolean> pairCodeExists = new MutableLiveData<>();
     private final MutableLiveData<String> successSaveLiveData;
@@ -37,6 +38,7 @@ public class ChildViewModel extends ViewModel {
         childLExistLiveData = repository.getChildLiveData();
         childrenLiveData = new MutableLiveData<>();
         childLiveData = repository.getChildLiveData();
+        deleteLiveData = repository.getDeleteLiveData();
     }
     public LiveData<Child> getChildExistLiveData() {
         return childLiveData;
@@ -102,17 +104,11 @@ public class ChildViewModel extends ViewModel {
     }
 
     public void deleteChildFromParent(String parentUid, String childUid) {
-        repository.deleteChildFromParent(parentUid, childUid, new ChildRepository.DeleteChildCallback() {
-            @Override
-            public void onSuccess() {
-                // Handle success if needed
-            }
+        repository.deleteChildFromParent(parentUid, childUid);
+    }
 
-            @Override
-            public void onFailure(String errorMessage) {
-                // Handle failure if needed
-            }
-        });
+    public LiveData<String> getDeleteLiveData() {
+        return deleteLiveData;
     }
 
     public LiveData<List<LocationHistory>> getLocationHistoryLiveData() {

@@ -3,8 +3,10 @@ package com.example.geofencing.ui.parent.childs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
@@ -30,8 +32,15 @@ public class ChildOptionDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        viewModel = new ViewModelProvider(this).get(ChildViewModel.class);
         Auth = FirebaseAuth.getInstance();
+        viewModel = new ViewModelProvider(this).get(ChildViewModel.class);
+        viewModel.getDeleteLiveData().observe(this, message  -> {
+            if (message != null) {
+                Log.d(TAG, "onCreateDialog: "+message);
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         String[] options = {"Lihat Lokasi Anak", "Lihat Riwayat Lokasi", "Area", "Hapus Anak"};
 

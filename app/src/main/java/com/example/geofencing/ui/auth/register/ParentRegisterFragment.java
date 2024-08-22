@@ -55,7 +55,12 @@ public class ParentRegisterFragment extends Fragment {
 
         parentViewModel.getErrorLiveData().observe(getViewLifecycleOwner(), error -> {
             if (error != null) {
-                Toast.makeText(getActivity(), "Pendaftaran Gagal: " + error, Toast.LENGTH_SHORT).show();
+                if (error.contains("email address is already in use")) {
+                    error = "Email sudah digunakan";
+                }else if (error.contains("The email address is badly formatted.")) {
+                    error = "Format email salah";
+                }
+                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
             }
         });
 

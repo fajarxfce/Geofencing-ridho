@@ -22,17 +22,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.commons.logging.LogFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class ChildRepository {
     private static final String TAG = "ChildRepository";
+    private static final org.apache.commons.logging.Log log = LogFactory.getLog(ChildRepository.class);
     private final FirebaseAuth firebaseAuth;
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
     private final MutableLiveData<String> errorSaveLiveData;
     private final MutableLiveData<String> successSaveLiveData;
+    private final MutableLiveData<String> deleteLiveData;
     private final MutableLiveData<List<Child>> childrenLiveData;
     private final MutableLiveData<Child> childLiveData;
     private final MutableLiveData<List<LocationHistory>> locationHistoryLiveData;
@@ -48,6 +52,7 @@ public class ChildRepository {
         errorLiveData = new MutableLiveData<>();
         errorSaveLiveData = new MutableLiveData<>();
         successSaveLiveData = new MutableLiveData<>();
+        deleteLiveData = new MutableLiveData<>();
         childrenLiveData = new MutableLiveData<>(new ArrayList<>());
         locationHistoryLiveData = new MutableLiveData<>();
         coordinatesLiveData = new MutableLiveData<>();
@@ -116,7 +121,7 @@ public class ChildRepository {
     }
 
     public MutableLiveData<String> getErrorSaveLiveData() {
-        return errorSaveLiveData;
+        return deleteLiveData;
     }
 
     public MutableLiveData<String> getSuccessSaveLiveData() {
@@ -304,20 +309,29 @@ public class ChildRepository {
         return coordinatesLiveData;
     }
 
-    public void deleteChildFromParent(String parentUid, String pairCode, DeleteChildCallback callback) {
+    public void deleteChildFromParent(String parentUid, String pairCode) {
         DBparents
                 .child(parentUid)
                 .child("childs")
                 .child(pairCode)
                 .removeValue()
-                .addOnSuccessListener(aVoid -> callback.onSuccess())
-                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "deleteChildFromParent: success");
+                        deleteLiveData.postValue("Anak berhasil dihapus");
+                    } else {
+                        Log.d(TAG, "deleteChildFromParent: failed");
+                        deleteLiveData.postValue("Anak gagal dihapus");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    deleteLiveData.postValue("Anak gagal dihapus");
+                });
+        ;
     }
 
-    public interface DeleteChildCallback {
-        void onSuccess();
-
-        void onFailure(String errorMessage);
+    public MutableLiveData<String> getDeleteLiveData() {
+        return deleteLiveData;
     }
 
 }

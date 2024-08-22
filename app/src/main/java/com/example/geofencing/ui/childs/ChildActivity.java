@@ -24,6 +24,7 @@ import com.example.geofencing.model.Polygon;
 import com.example.geofencing.services.LocationService;
 import com.example.geofencing.utils.Contstants;
 import com.example.geofencing.viewmodel.AreaViewModel;
+import com.example.geofencing.viewmodel.ChildViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,6 +47,7 @@ public class ChildActivity extends AppCompatActivity {
     private Location currentLocation;
     private int FINE_LOCATION_ACCESS_REQUEST_CODE = 10001;
     private AreaViewModel viewModel;
+    private ChildViewModel childViewModel;
     private FirebaseAuth mAuth;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -146,5 +148,6 @@ public class ChildActivity extends AppCompatActivity {
             mapFragment.getMapAsync(callback);
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
     }
 }
