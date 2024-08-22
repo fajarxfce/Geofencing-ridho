@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/navigation_account"
-        android:name="com.example.geofencing.ui.parent.account.AccountFragment"
+        android:name="com.mona.geofencing.ui.parent.account.AccountFragment"
         android:label="@string/akun"
         tools:layout="@layout/fragment_account" />
     <fragment
         android:id="@+id/navigation_area"
-        android:name="com.example.geofencing.ui.parent.area.AreaFragment"
+        android:name="com.mona.geofencing.ui.parent.area.AreaFragment"
         android:label="@string/area"
         tools:layout="@layout/fragment_area" >
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_childs"
-        android:name="com.example.geofencing.ui.parent.childs.ChildsFragment"
+        android:name="com.mona.geofencing.ui.parent.childs.ChildsFragment"
         android:label="@string/anak"
         tools:layout="@layout/fragment_childs" >
         <action
@@ -39,27 +39,27 @@
     </fragment>
     <fragment
         android:id="@+id/addAreaFragment"
-        android:name="com.example.geofencing.ui.parent.area.AddAreaFragment"
+        android:name="com.mona.geofencing.ui.parent.area.AddAreaFragment"
         android:label="@string/tambah_area"
         tools:layout="@layout/fragment_add_area" />
     <fragment
         android:id="@+id/childHistoryLocationFragment"
-        android:name="com.example.geofencing.ui.parent.childs.ChildHistoryLocationFragment"
+        android:name="com.mona.geofencing.ui.parent.childs.ChildHistoryLocationFragment"
         android:label="@string/riwayat_lokasi_anak"
         tools:layout="@layout/fragment_child_history_location" />
     <fragment
         android:id="@+id/childLocationFragment"
-        android:name="com.example.geofencing.ui.parent.childs.ChildLocationFragment"
+        android:name="com.mona.geofencing.ui.parent.childs.ChildLocationFragment"
         android:label="@string/lokasi_anak"
         tools:layout="@layout/fragment_child_location" />
     <fragment
         android:id="@+id/childAreaFragment"
-        android:name="com.example.geofencing.ui.parent.childs.ChildAreaFragment"
+        android:name="com.mona.geofencing.ui.parent.childs.ChildAreaFragment"
         android:label="@string/list_area_anak"
         tools:layout="@layout/fragment_child_area" />
     <fragment
         android:id="@+id/detailAreaFragment"
-        android:name="com.example.geofencing.ui.parent.area.DetailAreaFragment"
+        android:name="com.mona.geofencing.ui.parent.area.DetailAreaFragment"
         android:label="@string/detail_area"
         tools:layout="@layout/fragment_detail_area" />
 </navigation>

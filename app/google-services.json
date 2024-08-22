@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:690680090153:android:66a817050d592cde60d638",
+        "mobilesdk_app_id": "1:690680090153:android:536f679fcebc4d9260d638",
         "android_client_info": {
-          "package_name": "com.example.geofencing"
+          "package_name": "com.mona.geofencing"
         }
       },
       "oauth_client": [],

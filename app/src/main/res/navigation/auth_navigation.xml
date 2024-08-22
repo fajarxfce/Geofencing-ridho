@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashScreenragment2"
-        android:name="com.example.geofencing.ui.splashscreen.SplashScreenragment"
+        android:name="com.mona.geofencing.ui.splashscreen.SplashScreenragment"
         android:label="fragment_splash_screenragment"
         tools:layout="@layout/fragment_splash_screenragment" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment2"
-        android:name="com.example.geofencing.ui.welcome.WelcomeFragment"
+        android:name="com.mona.geofencing.ui.welcome.WelcomeFragment"
         android:label="@string/welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/childLoginFragment2"
-        android:name="com.example.geofencing.ui.auth.login.ChildLoginFragment"
+        android:name="com.mona.geofencing.ui.auth.login.ChildLoginFragment"
         android:label="@string/login_anak" >
         <action
             android:id="@+id/action_childLoginFragment2_to_childRegisterFragment2"
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/parentLoginFragment2"
-        android:name="com.example.geofencing.ui.auth.login.ParentLoginFragment"
+        android:name="com.mona.geofencing.ui.auth.login.ParentLoginFragment"
         android:label="@string/login_orang_tua" >
         <action
             android:id="@+id/action_parentLoginFragment2_to_parentRegisterFragment2"
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/childRegisterFragment2"
-        android:name="com.example.geofencing.ui.auth.register.ChildRegisterFragment"
+        android:name="com.mona.geofencing.ui.auth.register.ChildRegisterFragment"
         android:label="@string/registrasi_anak" >
         <action
             android:id="@+id/action_childRegisterFragment2_to_childLoginFragment2"
@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/parentRegisterFragment2"
-        android:name="com.example.geofencing.ui.auth.register.ParentRegisterFragment"
+        android:name="com.mona.geofencing.ui.auth.register.ParentRegisterFragment"
         android:label="@string/registrasi_orang_tua" >
         <action
             android:id="@+id/action_parentRegisterFragment2_to_parentLoginFragment2"

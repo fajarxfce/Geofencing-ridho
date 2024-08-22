@@ -1,0 +1,78 @@
+package com.mona.geofencing.model;
+
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class SendNotification {
+    private static final String TAG = "SendNotification";
+
+    private final String accessToken;
+    private final String userFcmToken;
+    private final String title;
+    private final String body;
+    private final String postUrl = "https://fcm.googleapis.com/v1/projects/geofencing-skripsi-ridho/messages:send";
+
+    public SendNotification(String accessToken, String userFcmToken, String title, String body) {
+        this.accessToken = accessToken;
+        this.userFcmToken = userFcmToken;
+        this.title = title;
+        this.body = body;
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void sendNotification() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                OkHttpClient client = new OkHttpClient();
+                MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+                JSONObject message = new JSONObject();
+                JSONObject notification = new JSONObject();
+                JSONObject jsonNotif = new JSONObject();
+
+
+                try {
+                    notification.put("title", title);
+                    notification.put("body", body);
+                    jsonNotif.put("notification", notification);
+                    jsonNotif.put("token", userFcmToken);
+                    message.put("message", jsonNotif);
+                    Log.d("Notif", message.toString());
+
+                } catch (JSONException e) {
+                    Log.d("FCM ERROR", e.toString());
+                }
+
+                RequestBody rBody = RequestBody.create(message.toString(), mediaType);
+                Request request = new Request.Builder()
+                        .url(postUrl)
+                        .post(rBody)
+                        .addHeader("Authorization", "Bearer " + accessToken)
+                        .addHeader("Content-Type", "application/json")
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    Log.d(TAG, response.toString());
+                } catch (IOException e) {
+                    Log.d(TAG, e.toString());
+                }
+
+                return null;
+            }
+        }.execute();
+    }
+}

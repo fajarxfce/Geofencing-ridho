@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    namespace 'com.example.geofencing'
+    namespace 'com.mona.geofencing'
     compileSdk 34
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
     defaultConfig {
-        applicationId "com.example.geofencing"
+        applicationId "com.mona.geofencing"
         minSdk 24
         targetSdk 34
         versionCode 1
