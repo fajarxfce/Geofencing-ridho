@@ -1,6 +1,7 @@
 package com.example.geofencing;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -68,5 +69,16 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 //        } else {
 //            getSupportActionBar().show();
 //        }
+
+        int destination = navDestination.getId();
+        if (destination == R.id.addAreaFragment
+        || destination == R.id.childHistoryLocationFragment
+        || destination == R.id.detailAreaFragment
+        || destination == R.id.childLocationFragment
+        || destination == R.id.childAreaFragment){
+            binding.navView.setVisibility(View.GONE);
+        } else {
+            binding.navView.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -65,9 +65,9 @@ public class WelcomeFragment extends Fragment {
             });
         }
 
-        if (mAuth.getCurrentUser() != null && sf.getPref("account_type", requireContext()) != null) {
-            navigateBasedOnAccountType();
-        }
+//        if (mAuth.getCurrentUser() != null && sf.getPref("account_type", requireContext()) != null) {
+//            navigateBasedOnAccountType();
+//        }
 
     }
 

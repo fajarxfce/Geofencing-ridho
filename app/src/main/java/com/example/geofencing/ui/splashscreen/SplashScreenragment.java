@@ -15,14 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.geofencing.MainActivity;
 import com.example.geofencing.R;
 import com.example.geofencing.databinding.FragmentSplashScreenragmentBinding;
 import com.example.geofencing.services.NetworkChangeReceiver;
+import com.example.geofencing.ui.childs.ChildActivity;
+import com.example.geofencing.utils.SharedPreferencesUtil;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashScreenragment extends Fragment implements NetworkChangeReceiver.NetworkChangeListener {
 
     private FragmentSplashScreenragmentBinding binding;
     private NetworkChangeReceiver network;
+    private FirebaseAuth mAuth;
+    private SharedPreferencesUtil sf;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,6 +40,8 @@ public class SplashScreenragment extends Fragment implements NetworkChangeReceiv
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+        sf = new SharedPreferencesUtil(requireContext());
         network = new NetworkChangeReceiver(this);
         getActivity().registerReceiver(network, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
@@ -42,6 +50,10 @@ public class SplashScreenragment extends Fragment implements NetworkChangeReceiv
     public void onNetworkChange(boolean isConnected) {
         if (isConnected) {
             new Handler().postDelayed(() -> {
+                if (mAuth.getCurrentUser() != null && sf.getPref("account_type", requireContext()) != null) {
+                    navigateBasedOnAccountType();
+                    return;
+                }
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_splashScreenragment2_to_welcomeFragment2);
             }, 2000);
         } else {
@@ -53,5 +65,20 @@ public class SplashScreenragment extends Fragment implements NetworkChangeReceiv
     public void onDestroyView() {
         super.onDestroyView();
         getActivity().unregisterReceiver(network);
+    }
+    private void navigateBasedOnAccountType() {
+        String accountType = sf.getPref("account_type", requireContext());
+        if ("child".equals(accountType)) {
+//            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_welcomeFragment2_to_childFragment2);
+            Intent intent = new Intent(getActivity(), ChildActivity.class);
+
+            getActivity().finish();
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+
+            getActivity().finish();
+            startActivity(intent);
+        }
     }
 }

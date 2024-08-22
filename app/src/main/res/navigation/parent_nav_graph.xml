@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/addAreaFragment"
         android:name="com.example.geofencing.ui.parent.area.AddAreaFragment"
-        android:label="fragment_add_area"
+        android:label="@string/tambah_area"
         tools:layout="@layout/fragment_add_area" />
     <fragment
         android:id="@+id/childHistoryLocationFragment"
