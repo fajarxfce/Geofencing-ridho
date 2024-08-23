@@ -69,6 +69,11 @@ public class ParentLoginFragment extends Fragment {
                 Toast.makeText(getActivity(), "Login Gagal: " + error, Toast.LENGTH_SHORT).show();
             }
         });
+
+        binding.txtForgotPassword.setOnClickListener(v -> {
+            ForgotPasswordDialog dialog = new ForgotPasswordDialog();
+            dialog.show(getParentFragmentManager(), "ForgotPasswordDialog");
+        });
     }
 
     private boolean validateForm() {

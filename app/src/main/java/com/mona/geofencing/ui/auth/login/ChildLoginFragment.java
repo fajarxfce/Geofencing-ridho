@@ -44,6 +44,11 @@ public class ChildLoginFragment extends Fragment {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_childLoginFragment2_to_childRegisterFragment2);
         });
 
+        binding.txtForgotPassword.setOnClickListener(v -> {
+            ForgotPasswordDialog dialog = new ForgotPasswordDialog();
+            dialog.show(getParentFragmentManager(), "ForgotPasswordDialog");
+        });
+
         binding.login.setOnClickListener(v -> {
             String email = binding.txtEmail.getText().toString().trim();
             String password = binding.txtPassword.getText().toString().trim();
