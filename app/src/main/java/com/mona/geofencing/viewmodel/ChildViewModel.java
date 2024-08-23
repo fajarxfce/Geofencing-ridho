@@ -123,4 +123,8 @@ public class ChildViewModel extends ViewModel {
         repository.getChildrenData(uuid);
     }
 
+    public void updateFcmToken(String parentUid , List<Child> child, String fcmtoken) {
+        repository.updateFcmToken(parentUid, child, fcmtoken);
+    }
+
 }

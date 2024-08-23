@@ -30,7 +30,6 @@ import java.util.Random;
 
 public class ChildRepository {
     private static final String TAG = "ChildRepository";
-    private static final org.apache.commons.logging.Log log = LogFactory.getLog(ChildRepository.class);
     private final FirebaseAuth firebaseAuth;
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
@@ -53,7 +52,7 @@ public class ChildRepository {
         errorSaveLiveData = new MutableLiveData<>();
         successSaveLiveData = new MutableLiveData<>();
         deleteLiveData = new MutableLiveData<>();
-        childrenLiveData = new MutableLiveData<>(new ArrayList<>());
+        childrenLiveData = new MutableLiveData<>();
         locationHistoryLiveData = new MutableLiveData<>();
         coordinatesLiveData = new MutableLiveData<>();
         childLiveData = new MutableLiveData<>();
@@ -61,18 +60,6 @@ public class ChildRepository {
         DBpairCode = FirebaseDatabase.getInstance().getReference("child_pair_code");
         DBparents = FirebaseDatabase.getInstance().getReference("parents");
         DBHistory = FirebaseDatabase.getInstance().getReference("location_history");
-    }
-
-    public interface PairCodeCallback {
-        void onExist(Child child);
-
-        void onNotExist();
-    }
-
-    public interface ChildrenCallback {
-        void onChildrenFetched(List<Child> children);
-
-        void onError(String error);
     }
 
     public void register(String email, String password) {
@@ -236,7 +223,8 @@ public class ChildRepository {
     }
 
     public void fetchChildren(String parentUid) {
-        DBparents.child(parentUid)
+        DBparents
+                .child(parentUid)
                 .child("childs").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -244,13 +232,15 @@ public class ChildRepository {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Child child = snapshot.getValue(Child.class);
                             children.add(child);
+                            Log.d(TAG, "onDataChange: "+ snapshot.getValue(Child.class).getPairCode());
                         }
+
                         childrenLiveData.postValue(children);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Log.d(TAG, "onCancelled: "+databaseError.getMessage());
                     }
                 });
     }
@@ -302,7 +292,7 @@ public class ChildRepository {
         return locationHistoryLiveData;
     }
 
-    public LiveData<List<Child>> getChildrenLiveData() {
+    public MutableLiveData<List<Child>> getChildrenLiveData() {
         return childrenLiveData;
     }
 
@@ -355,4 +345,13 @@ public class ChildRepository {
         return deleteLiveData;
     }
 
+    public void updateFcmToken(String parentUid, List<Child> child, String fcmToken) {
+        for (Child c : child) {
+            DBchilds
+                    .child(c.getChildId())
+                    .child("parent_fcm_tokens")
+                    .child(parentUid)
+                    .setValue(fcmToken);
+        }
+    }
 }

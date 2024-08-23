@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.mona.geofencing.R;
 import com.mona.geofencing.databinding.FragmentParentBinding;
 import com.mona.geofencing.utils.SharedPreferencesUtil;
@@ -25,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.mona.geofencing.viewmodel.ChildViewModel;
 
 public class ParentFragment extends Fragment {
 
@@ -32,6 +35,8 @@ public class ParentFragment extends Fragment {
     private static final String TAG = "ParentFragment";
     private FragmentParentBinding binding;
     private SharedPreferencesUtil sf;
+    private ChildViewModel childViewModel;
+    private FirebaseAuth mAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +49,8 @@ public class ParentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sf = new SharedPreferencesUtil(requireContext());
+        childViewModel = new ViewModelProvider(this).get(ChildViewModel.class);
+        mAuth = FirebaseAuth.getInstance();
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_account, R.id.navigation_area, R.id.navigation_childs)
                 .build();
@@ -51,6 +58,7 @@ public class ParentFragment extends Fragment {
 //        NavHostFragment navHostFragment = (NavHostFragment) getChildFragmentManager().findFragmentById(R.id.nav_host_fragment_parent);
 //        NavController navController = navHostFragment.getNavController();
 //        NavigationUI.setupWithNavController(navView, navController);
+        getAllChilds();
         logRegToken();
         BottomNavigationView navView = binding.navView;
         NavHostFragment navHostFragment = (NavHostFragment) getChildFragmentManager().findFragmentById(R.id.nav_host_fragment_parent);
@@ -86,5 +94,17 @@ public class ParentFragment extends Fragment {
         protected void onPostExecute(String token) {
             Log.d(TAG, "AccessToken: " + token);
         }
+    }
+
+    private void getAllChilds() {
+        String uuid = mAuth.getCurrentUser().getUid();
+        Log.d(TAG, "getAllChilds: "+uuid);
+
+        childViewModel.getChildrenLiveData().observe(getViewLifecycleOwner(), children -> {
+            for (int i = 0; i < children.size(); i++) {
+                Log.d(TAG, "getAllChilds: " + children.get(i).getPairCode());
+            }
+        });
+        childViewModel.fetchChildren(uuid);
     }
 }
