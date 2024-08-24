@@ -53,6 +53,15 @@ public class LocationService extends Service {
     private FirebaseAuth mAuth;
     private List<String> fcmTokens = new ArrayList<>();
 
+    private static void destroy() {
+        try {
+            Thread.sleep(4000);
+            System.exit(0);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public interface LocationListener {
         void onLocationChanged(boolean inside, String name);
     }
@@ -243,14 +252,7 @@ public class LocationService extends Service {
                 .removeLocationUpdates(locationCallback);
         stopForeground(true);
         stopSelf();
-        new Thread(() -> {
-            try {
-                Thread.sleep(4000);
-                System.exit(0);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        new Thread(LocationService::destroy).start();
     }
 
     @Override
