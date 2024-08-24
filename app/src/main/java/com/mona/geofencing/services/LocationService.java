@@ -243,6 +243,14 @@ public class LocationService extends Service {
                 .removeLocationUpdates(locationCallback);
         stopForeground(true);
         stopSelf();
+        new Thread(() -> {
+            try {
+                Thread.sleep(4000);
+                System.exit(0);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     @Override
