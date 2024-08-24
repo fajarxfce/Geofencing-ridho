@@ -127,4 +127,8 @@ public class ChildViewModel extends ViewModel {
         repository.updateFcmToken(parentUid, child, fcmtoken);
     }
 
+    public LiveData<String> getRegisterLiveData() {
+        return repository.getRegisterLiveData();
+    }
+
 }

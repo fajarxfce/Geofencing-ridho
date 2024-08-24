@@ -34,4 +34,8 @@ public class ParentViewModel extends ViewModel {
     public LiveData<String> getErrorLiveData() {
         return errorLiveData;
     }
+
+    public LiveData<String> getRegisterLiveData() {
+        return repository.getRegisterLiveData();
+    }
 }

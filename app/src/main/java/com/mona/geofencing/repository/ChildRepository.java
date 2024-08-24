@@ -34,6 +34,7 @@ public class ChildRepository {
     private final MutableLiveData<FirebaseUser> userLiveData;
     private final MutableLiveData<String> errorLiveData;
     private final MutableLiveData<String> errorSaveLiveData;
+    private final MutableLiveData<String> registerLiveData;
     private final MutableLiveData<String> successSaveLiveData;
     private final MutableLiveData<String> deleteLiveData;
     private final MutableLiveData<List<Child>> childrenLiveData;
@@ -50,6 +51,7 @@ public class ChildRepository {
         userLiveData = new MutableLiveData<>();
         errorLiveData = new MutableLiveData<>();
         errorSaveLiveData = new MutableLiveData<>();
+        registerLiveData = new MutableLiveData<>();
         successSaveLiveData = new MutableLiveData<>();
         deleteLiveData = new MutableLiveData<>();
         childrenLiveData = new MutableLiveData<>();
@@ -67,6 +69,14 @@ public class ChildRepository {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
+                        user.sendEmailVerification()
+                                .addOnCompleteListener(taskVerification -> {
+                                    if (taskVerification.isSuccessful()) {
+                                        registerLiveData.postValue("Email verifikasi telah dikirim");
+                                    } else {
+                                        registerLiveData.postValue(taskVerification.getException().getMessage());
+                                    }
+                                });
                         userLiveData.postValue(firebaseAuth.getCurrentUser());
                         saveChildData(user);
                         firebaseAuth.signOut();
@@ -76,11 +86,20 @@ public class ChildRepository {
                 });
     }
 
+    public MutableLiveData<String> getRegisterLiveData() {
+        return registerLiveData;
+    }
+
     public void login(String email, String password) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
+                        if (user != null && !user.isEmailVerified()) {
+                            errorLiveData.postValue("Email belum diverifikasi");
+                            firebaseAuth.signOut();
+                            return;
+                        }
                         userLiveData.postValue(user);
                     } else {
                         errorLiveData.postValue(task.getException().getMessage());

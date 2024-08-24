@@ -62,6 +62,12 @@ public class ChildRegisterFragment extends Fragment {
                 Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
             }
         });
+
+        viewModel.getRegisterLiveData().observe(getViewLifecycleOwner(), register -> {
+            if (register != null) {
+                Toast.makeText(getActivity(), register, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private boolean validateForm() {
