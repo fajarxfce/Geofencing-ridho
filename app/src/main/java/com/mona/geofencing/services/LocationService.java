@@ -73,10 +73,26 @@ public class LocationService extends Service {
                 Location location = locationResult.getLastLocation();
                 if (FakeGpsDetector.isFakeGps(getApplicationContext(), location)) {
                     Log.d(TAG, "onLocationResult: Fake GPS detected");
-                    Toast.makeText(getApplicationContext(), "Fake GPS detected", Toast.LENGTH_SHORT).show();
-                    stopLocationService();
-                    stopSelf();
-                    System.exit(0);
+                    Toast.makeText(getApplicationContext(), "Fake GPS detected", Toast.LENGTH_SHORT)
+                            .show();
+                    parentFcmTokensLiveData.observeForever(parentFcmTokens -> {
+                        if (parentFcmTokens != null) {
+                            fcmTokens = parentFcmTokens;
+                            String email = mAuth.getCurrentUser().getEmail();
+                            String childName = StringHelper.usernameFromEmail(email);
+                            String body =
+                                    "[ " + new Date() + " ]" + " : Anak anda " + childName + " menggunakan Fake GPS";
+                            for (String parentFcmToken : parentFcmTokens) {
+                                new SendNotificationTask(parentFcmToken, "Fake GPS Detected",
+                                        body
+                                ).execute();
+                            }
+                        }
+                        stopLocationService();
+                        stopSelf();
+//                        System.exit(0);
+
+                    });
                     return;
                 }
 
@@ -181,7 +197,8 @@ public class LocationService extends Service {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Intent resultIntent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                getApplicationContext(),
                 0,
                 resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
@@ -198,7 +215,8 @@ public class LocationService extends Service {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (notificationManager != null && notificationManager.getNotificationChannel(channelId) == null) {
-                NotificationChannel notificationChannel = new NotificationChannel(channelId,
+                NotificationChannel notificationChannel = new NotificationChannel(
+                        channelId,
                         "Location Service",
                         NotificationManager.IMPORTANCE_HIGH
                 );
@@ -266,6 +284,7 @@ public class LocationService extends Service {
                 String userFcmToken = this.userFcmToken; // Replace with actual parent FCM token
                 String title = this.title;
                 String body = this.body;
+                Log.d(TAG, "onPostExecute: " + userFcmToken);
 
                 SendNotification sendNotification =
                         new SendNotification(accessToken, userFcmToken, title, body);
