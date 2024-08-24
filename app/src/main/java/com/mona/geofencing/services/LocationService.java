@@ -6,10 +6,12 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +24,7 @@ import com.mona.geofencing.model.SendNotification;
 import com.mona.geofencing.repository.ChildRepository;
 import com.mona.geofencing.repository.PolygonRepository;
 import com.mona.geofencing.utils.Contstants;
+import com.mona.geofencing.utils.FakeGpsDetector;
 import com.mona.geofencing.utils.TokenUtil;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -67,6 +70,15 @@ public class LocationService extends Service {
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
                 LatLng currentLocation = new LatLng(latitude, longitude);
+                Location location = locationResult.getLastLocation();
+                if (FakeGpsDetector.isFakeGps(getApplicationContext(), location)) {
+                    Log.d(TAG, "onLocationResult: Fake GPS detected");
+                    Toast.makeText(getApplicationContext(), "Fake GPS detected", Toast.LENGTH_SHORT).show();
+                    stopLocationService();
+                    stopSelf();
+                    System.exit(0);
+                    return;
+                }
 
                 Log.d(TAG, "onLocationResult: " + latitude + " " + longitude);
 
