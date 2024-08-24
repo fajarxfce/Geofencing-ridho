@@ -46,10 +46,6 @@ public class FakeGpsDetector {
 
     public static boolean isFakeGps(Context context, Location location) {
         return isMockLocationEnabled(context) ||
-                isFromMockProvider(location) ||
-                hasSuspiciousApps(context) ||
-                isLocationAccuracySuspicious(location) ||
-                isLocationSpeedSuspicious(location) ||
-                isLocationProviderSuspicious(location);
+                isFromMockProvider(location);
     }
 }
