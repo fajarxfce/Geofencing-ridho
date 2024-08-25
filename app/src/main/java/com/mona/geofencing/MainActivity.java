@@ -1,13 +1,20 @@
 package com.mona.geofencing;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -48,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         mAuth = FirebaseAuth.getInstance();
         logRegToken();
         getAllChilds();
+        askNotificationPermission();
 
 //        setSupportActionBar(binding.toolbar);
 //        if (getSupportActionBar() != null) {
@@ -128,5 +136,38 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
                         sf.setPref("parent_fcm_token", token, MainActivity.this);
                     }
                 });
+    }
+
+    // Declare the launcher at the top of your Activity/Fragment:
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                    Log.d(TAG, "request-permission: granted");
+                } else {
+                    // TODO: Inform user that that your app will not show notifications.
+                    Log.d(TAG, "request-permission: denied");
+                }
+            });
+
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "askNotificationPermission: granted");
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(POST_NOTIFICATIONS)) {
+                // TODO: display an educational UI explaining to the user the features that will be enabled
+                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+                //       If the user selects "No thanks," allow the user to continue without notifications.
+                Log.d(TAG, "askNotificationPermission: shouldShowRequestPermissionRationale");
+                requestPermissionLauncher.launch(POST_NOTIFICATIONS);
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(POST_NOTIFICATIONS);
+            }
+        }
     }
 }
