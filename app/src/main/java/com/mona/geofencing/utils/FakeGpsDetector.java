@@ -45,11 +45,17 @@ public class FakeGpsDetector {
     }
 
     public static boolean isFakeGps(Context context, Location location) {
+        Log.d(TAG, "isFakeGps: isMockLocationEnabled: " + isMockLocationEnabled(context));
+        Log.d(TAG, "isFakeGps: isFromMockProvider: " + isFromMockProvider(location));
+        Log.d(TAG, "isFakeGps: hasSuspiciousApps: " + hasSuspiciousApps(context));
+        Log.d(TAG, "isFakeGps: isLocationAccuracySuspicious: " + isLocationAccuracySuspicious(location));
+        Log.d(TAG, "isFakeGps: isLocationSpeedSuspicious: " + isLocationSpeedSuspicious(location));
+        Log.d(TAG, "isFakeGps: isLocationProviderSuspicious: " + isLocationProviderSuspicious(location));
+
         return isMockLocationEnabled(context) ||
                 isFromMockProvider(location) ||
                 hasSuspiciousApps(context) ||
                 isLocationAccuracySuspicious(location) ||
-                isLocationSpeedSuspicious(location) ||
-                isLocationProviderSuspicious(location);
+                isLocationSpeedSuspicious(location);
     }
 }
