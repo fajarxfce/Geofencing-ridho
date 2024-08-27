@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextUtils;
@@ -51,7 +52,7 @@ public class ParentRegisterFragment extends Fragment {
         parentViewModel.getUserLiveData().observe(getViewLifecycleOwner(), firebaseUser -> {
             if (firebaseUser != null) {
                 Toast.makeText(getActivity(), "Pendaftaran berhasil", Toast.LENGTH_SHORT).show();
-//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_parentRegisterFragment2_to_parentLoginFragment2);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_childRegisterFragment2_to_childLoginFragment2);
             }
         });
 

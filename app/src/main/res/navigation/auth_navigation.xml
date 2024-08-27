@@ -53,7 +53,9 @@
         android:label="@string/registrasi_anak" >
         <action
             android:id="@+id/action_childRegisterFragment2_to_childLoginFragment2"
-            app:destination="@id/childLoginFragment2" />
+            app:destination="@id/childLoginFragment2"
+            app:popUpTo="@id/childLoginFragment2"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/parentRegisterFragment2"
@@ -61,7 +63,9 @@
         android:label="@string/registrasi_orang_tua" >
         <action
             android:id="@+id/action_parentRegisterFragment2_to_parentLoginFragment2"
-            app:destination="@id/parentLoginFragment2" />
+            app:destination="@id/parentLoginFragment2"
+            app:popUpTo="@id/parentLoginFragment2"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
