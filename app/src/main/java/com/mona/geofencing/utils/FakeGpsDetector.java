@@ -54,8 +54,6 @@ public class FakeGpsDetector {
 
         return isMockLocationEnabled(context) ||
                 isFromMockProvider(location) ||
-                hasSuspiciousApps(context) ||
-                isLocationAccuracySuspicious(location) ||
-                isLocationSpeedSuspicious(location);
+                hasSuspiciousApps(context);
     }
 }
