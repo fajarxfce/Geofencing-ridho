@@ -52,7 +52,7 @@ public class ParentRegisterFragment extends Fragment {
         parentViewModel.getUserLiveData().observe(getViewLifecycleOwner(), firebaseUser -> {
             if (firebaseUser != null) {
                 Toast.makeText(getActivity(), "Pendaftaran berhasil", Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_parentRegisterFragment2_to_parentLoginFragment2);
+                Navigation.findNavController(view).navigate(R.id.action_parentRegisterFragment2_to_parentLoginFragment2);
             }
         });
 

@@ -137,7 +137,7 @@ public class ChildRepository {
     private int generatePairCode() {
         Random rnd = new Random();
         int number = rnd.nextInt(999999);
-        return number;
+        return Integer.parseInt(String.format("%06d", number));
     }
 
     public MutableLiveData<Child> getChildLiveData() {
