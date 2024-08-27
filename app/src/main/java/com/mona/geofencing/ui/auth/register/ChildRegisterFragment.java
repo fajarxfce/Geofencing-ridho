@@ -7,7 +7,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +70,41 @@ public class ChildRegisterFragment extends Fragment {
                 Toast.makeText(getActivity(), register, Toast.LENGTH_SHORT).show();
             }
         });
+
+        binding.txtPassword.addTextChangedListener(passwordTextWatcher);
+        binding.txtPasswordConfirm.addTextChangedListener(passwordTextWatcher);
+    }
+
+    private final TextWatcher passwordTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // No action needed
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            validatePasswords();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // No action needed
+        }
+    };
+
+    private boolean validatePasswords() {
+        boolean result = true;
+        String password = binding.txtPassword.getText().toString();
+        String confirmPassword = binding.txtPasswordConfirm.getText().toString();
+
+        if (!password.equals(confirmPassword)) {
+            binding.txtPasswordConfirm.setError("Passwords do not match");
+            result = false;
+        } else {
+            binding.txtPasswordConfirm.setError(null);
+            result = true;
+        }
+        return result;
     }
 
     private boolean validateForm() {

@@ -34,4 +34,5 @@
     <string name="tambah_area">Tambah Area</string>
     <string name="reset">Reset</string>
     <string name="enter_email">Masukkan Email</string>
+    <string name="konfirmasi_password">Konfirmasi Password</string>
 </resources>
