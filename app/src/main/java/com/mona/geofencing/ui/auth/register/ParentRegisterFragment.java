@@ -38,7 +38,7 @@ public class ParentRegisterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         parentViewModel = new ViewModelProvider(this).get(ParentViewModel.class);
         binding.register.setOnClickListener(v -> {
-            if (validateForm() == validatePasswords()) {
+            if (!validateForm() && !validatePasswords()) {
                 Toast.makeText(getActivity(), "Silahkan isi form dengan benar!", Toast.LENGTH_SHORT).show();
                 return;
             }

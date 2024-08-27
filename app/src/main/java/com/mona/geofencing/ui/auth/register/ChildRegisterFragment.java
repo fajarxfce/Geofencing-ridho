@@ -38,7 +38,8 @@ public class ChildRegisterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ChildViewModel.class);
         binding.register.setOnClickListener(v -> {
-            if (!validateForm()) {
+            if (!validateForm() && !validatePasswords()) {
+                Toast.makeText(getActivity(), "Silahkan isi form dengan benar!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -51,7 +52,7 @@ public class ChildRegisterFragment extends Fragment {
         viewModel.getUserLiveData().observe(getViewLifecycleOwner(), firebaseUser -> {
             if (firebaseUser != null) {
                 Toast.makeText(getActivity(), "Pendaftaran berhasil", Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_parentRegisterFragment2_to_parentLoginFragment2);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_auth).navigate(R.id.action_childRegisterFragment2_to_childLoginFragment2);
             }
         });
 
